@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>대하우스 - 요괴들의 비밀스러운 동거</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-main: #faf6ee;
+      --bg-card: #eae4d8;
+      --ink: #2e2416;
+      --gold: #c3a478;
+      --text-muted: #8a7962;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--ink);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    header {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 70px;
+      background: rgba(250, 246, 238, 0.95);
+      border-bottom: 1px solid #e1d7c6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(46,36,22,0.02);
+    }
+
+    .logo {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--ink);
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+    .logo:hover { color: var(--gold); }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    nav { display: flex; gap: 2rem; }
+
+    nav a {
+      text-decoration: none;
+      color: var(--ink);
+      font-weight: 500;
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 0.5rem 0;
+      position: relative;
+      transition: color 0.2s;
+    }
+    nav a.active, nav a:hover {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    /* 장바구니 아이콘 버튼 */
+    .cart-btn {
+      position: relative;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--ink);
+      padding: 6px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s, background 0.2s;
+    }
+    .cart-btn:hover {
+      color: var(--gold);
+      background: rgba(195,164,120,0.1);
+    }
+    .cart-btn.active {
+      color: var(--gold);
+    }
+    .cart-btn svg {
+      width: 24px;
+      height: 24px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .cart-badge {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      background: var(--gold);
+      color: #fff;
+      font-size: 0.6rem;
+      font-weight: 700;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      display: none; /* 상품 없을 때 숨김 */
+    }
+
+    /* ✅ 섹션 표시/숨김은 클래스로만 관리 */
+    .section {
+      display: none;
+      padding-top: 100px;
+      min-height: 100vh;
+      width: 100%;
+    }
+    .section.active { display: block; }
+
+    .section-header { text-align: center; padding-bottom: 3rem; }
+
+    .section-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title-deco {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .deco-line { display: inline-block; width: 40px; height: 1px; background: var(--gold); }
+    .deco-mark { color: var(--gold); font-size: 0.8rem; }
+
+    .btn-primary, .btn-secondary {
+      font-family: 'Noto Sans KR', sans-serif;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-primary { background: var(--ink); color: #fff; }
+    .btn-primary:hover { background: #453622; transform: translateY(-2px); }
+
+    .btn-secondary { background: #fff; color: var(--ink); border: 1px solid #e1d7c6; }
+    .btn-secondary:hover { background: #faf6ee; transform: translateY(-2px); }
+
+    .fallback-box {
+      width: 100%; height: 100%;
+      background: var(--bg-card);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      border-radius: 6px;
+    }
+
+    /* ── 퀴즈 카드 ── */
+    .quiz-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2rem 1rem 6rem;
+    }
+
+    /* 시작 화면 */
+    .quiz-start {
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+    .quiz-start p {
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    /* 진행 바 */
+    .quiz-progress-bar-wrap {
+      width: 100%;
+      height: 4px;
+      background: #e1d7c6;
+      border-radius: 99px;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+    .quiz-progress-bar-fill {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 99px;
+      transition: width 0.4s ease;
+    }
+    .quiz-progress-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-align: right;
+      margin-bottom: 0.5rem;
+    }
+
+    /* 질문 카드 */
+    .quiz-card {
+      background: #fff;
+      border: 1px solid #e1d7c6;
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 8px 30px rgba(46,36,22,0.07);
+      margin-bottom: 1.5rem;
+    }
+    .quiz-q {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+      word-break: keep-all;
+    }
+
+    /* 선택지 버튼 */
+    .quiz-opts {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .quiz-opt {
+      width: 100%;
+      background: var(--bg-main);
+      border: 1.5px solid #e1d7c6;
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      text-align: left;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.95rem;
+      color: var(--ink);
+      cursor: pointer;
+      transition: all 0.18s ease;
+      line-height: 1.5;
+    }
+    .quiz-opt:hover {
+      border-color: var(--gold);
+      background: #fff;
+      color: var(--ink);
+      transform: translateX(4px);
+      box-shadow: 0 4px 14px rgba(195,164,120,0.15);
+    }
+
+    /* 결과 카드 */
+    .result-card {
+      background: #fff;
+      border: 1px solid #e1d7c6;
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 8px 30px rgba(46,36,22,0.07);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .result-img-wrap {
+      width: 100%;
+      max-width: 340px;
+      margin: 0 auto 2rem;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(46,36,22,0.15);
+      aspect-ratio: 3/4;
+      background: var(--bg-card);
+    }
+    .result-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .result-name {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 0.3rem;
+    }
+    .result-type {
+      font-size: 0.9rem;
+      color: var(--gold);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-bottom: 1.2rem;
+    }
+    .result-desc {
+      font-size: 1rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      word-break: keep-all;
+    }
+
+    /* ── 굿즈 카드 ── */
+    .goods-card {
+      background: #fff;
+      border: 1px solid #e1d7c6;
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .goods-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 28px rgba(46,36,22,0.1);
+    }
+    .goods-img-wrap {
+      width: 100%;
+      aspect-ratio: 1/1;
+      background: var(--bg-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .goods-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .goods-info {
+      padding: 0.9rem 1rem 0.4rem;
+    }
+    .goods-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--ink);
+      margin-bottom: 0.25rem;
+    }
+    .goods-price {
+      font-size: 0.85rem;
+      color: var(--gold);
+      font-weight: 700;
+    }
+    .goods-btn {
+      margin: 0.6rem 1rem 1rem;
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans KR', sans-serif;
+      transition: background 0.2s;
+    }
+    .goods-btn:hover { background: #453622; }
+
+    /* 장바구니 아이템 */
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #f0ebe1;
+      font-size: 0.88rem;
+    }
+    .cart-item-name { color: var(--ink); font-weight: 500; flex: 1; }
+    .cart-item-price { color: var(--text-muted); margin: 0 0.8rem; white-space: nowrap; }
+    .cart-item-remove {
+      background: none; border: none; cursor: pointer;
+      color: var(--text-muted); font-size: 1rem; padding: 2px 4px;
+      transition: color 0.2s;
+    }
+    .cart-item-remove:hover { color: var(--ink); }
+
+    /* 토스트 */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--ink);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 99px;
+      font-size: 0.9rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      z-index: 9999;
+      white-space: nowrap;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo" onclick="resetToHome()">대하우스</div>
+    <div class="header-right">
+      <nav>
+        <a id="nav-home" class="active" onclick="switchTab('home')">홈</a>
+        <a id="nav-characters" onclick="switchTab('characters')">캐릭터</a>
+        <a id="nav-worldview" onclick="switchTab('worldview')">세계관</a>
+        <a id="nav-test" onclick="switchTab('test')">유형 테스트</a>
+        <a id="nav-shop" onclick="switchTab('shop')">굿즈샵</a>
+      </nav>
+      <button class="cart-btn" id="cart-icon-btn" onclick="toggleCart()" title="장바구니">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        <span class="cart-badge" id="cart-badge">0</span>
+      </button>
+    </div>
+  </header>
+
+  <section id="home" class="section active">
+    <div style="max-width: 1100px; margin: 0 auto; padding: 2rem 1rem 6rem; text-align: center;">
+      <div style="width: 100%; max-width: 950px; margin: 0 auto 3rem; border-radius: 8px; overflow: hidden; box-shadow: 0 15px 40px rgba(46,36,22,0.15); aspect-ratio: 16/9; background: var(--bg-card);">
+        <img src="images/home_main.png" alt="대하우스 메인 로고" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('home-fallback').style.display='flex';">
+        <div id="home-fallback" class="fallback-box" style="display: none;">
+          <span style="font-family: 'Nanum Myeongjo', serif; font-size: 1.5rem; font-weight: 700;">대하우스 메인 화면</span>
+          <p style="font-size: 0.9rem; margin-top: 0.5rem;">[ images/home_main.png 파일을 넣어주세요 ]</p>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="switchTab('test')" style="padding: 1.2rem 4rem; font-size: 1.2rem; font-weight: 700; letter-spacing: 0.05em; border-radius: 50px; box-shadow: 0 6px 20px rgba(46,36,22,0.15);">테스트 시작하기</button>
+    </div>
+  </section>
+
+  <section id="characters" class="section">
+    <div style="max-width: 1000px; margin: 0 auto; padding: 2rem 1rem 6rem; text-align: center;">
+      <div class="section-header">
+        <div class="section-title">캐릭터</div>
+        <div class="section-title-deco">
+          <span class="deco-line"></span>
+          <span class="deco-mark">✦</span>
+          <span class="deco-line"></span>
+        </div>
+      </div>
+
+      <div style="position: relative; display: flex; align-items: center; justify-content: center; width: 100%; max-width: 950px; margin: 0 auto;">
+        <button onclick="prevChar()" style="position: absolute; left: -20px; z-index: 10; border-radius: 50%; width: 50px; height: 50px; border: 1px solid #e1d7c6; background: #faf6ee; color: #5a4b36; cursor: pointer; font-weight: bold; font-size: 1.2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">&lt;</button>
+
+        <div style="width: 100%; border-radius: 8px; overflow: hidden; box-shadow: 0 12px 36px rgba(46,36,22,0.15); background: var(--bg-card);">
+          <img id="charMainDisplay" src="images/char_01.png" alt="캐릭터 프로필" style="width: 100%; height: auto; display: block;" onerror="handleCharImgError()">
+          <div id="charFallbackDisplay" class="fallback-box" style="display: none; padding: 6rem 2rem;">
+            <span style="font-family: 'Nanum Myeongjo', serif; font-size: 1.3rem; font-weight: 700; color: var(--ink);" id="charFallbackText">[ images/char_01.png ]</span>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-muted);">해당 경로에 이미지가 없거나 확장자가 다릅니다.</p>
+          </div>
+        </div>
+
+        <button onclick="nextChar()" style="position: absolute; right: -20px; z-index: 10; border-radius: 50%; width: 50px; height: 50px; border: 1px solid #e1d7c6; background: #faf6ee; color: #5a4b36; cursor: pointer; font-weight: bold; font-size: 1.2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">&gt;</button>
+      </div>
+
+      <div style="display: flex; justify-content: center; gap: 12px; margin-top: 2.5rem;">
+        <span class="c-dot" onclick="setChar(0)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 1; transition: opacity 0.2s;"></span>
+        <span class="c-dot" onclick="setChar(1)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.2s;"></span>
+        <span class="c-dot" onclick="setChar(2)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.2s;"></span>
+        <span class="c-dot" onclick="setChar(3)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.2s;"></span>
+        <span class="c-dot" onclick="setChar(4)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.2s;"></span>
+        <span class="c-dot" onclick="setChar(5)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.2s;"></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="worldview" class="section">
+    <div style="text-align: center; max-width: 1100px; margin: 0 auto; padding: 2rem 1rem 6rem;">
+      <div class="section-header">
+        <div class="section-title">세계관</div>
+        <div class="section-title-deco">
+          <span class="deco-line"></span>
+          <span class="deco-mark">✦</span>
+          <span class="deco-line"></span>
+        </div>
+      </div>
+      <h2 style="font-family: 'Nanum Myeongjo', serif; font-size: 1.9rem; font-weight: 800; color: var(--ink); line-height: 1.6; letter-spacing: 0.04em; word-break: keep-all; margin-bottom: 3.5rem; padding: 0 1rem;">
+        "21세기 현대, 사람들의 눈을 피해 깊은 숲속에 살아가는<br>괴담 속 요괴들의 비밀스러운 쉐어하우스!"
+      </h2>
+      <div style="width: 100%; max-width: 950px; margin: 0 auto; border-radius: 8px; overflow: hidden; box-shadow: 0 12px 36px rgba(46,36,22,0.15); aspect-ratio: 16/9; background: var(--bg-card);">
+        <img src="images/world_house.png" alt="대하우스 전경" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('world-fallback').style.display='flex';">
+        <div id="world-fallback" class="fallback-box" style="display: none;">
+          <span style="font-family: 'Nanum Myeongjo', serif; font-size: 1.2rem; font-weight: 700;">대하우스 전경 이미지</span>
+          <p style="font-size: 0.85rem; margin-top: 0.5rem;">[ images/world_house.png 파일을 넣어주세요 ]</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 유형 테스트 섹션 ── -->
+  <section id="test" class="section">
+    <div class="quiz-wrap">
+      <div class="section-header">
+        <div class="section-title">유형 테스트</div>
+        <div class="section-title-deco">
+          <span class="deco-line"></span>
+          <span class="deco-mark">✦</span>
+          <span class="deco-line"></span>
+        </div>
+      </div>
+
+      <!-- 시작 화면 -->
+      <div id="quizStart" class="quiz-start">
+        <p>나와 닮은 대하우스의 요괴는 누구일까요?<br>5가지 질문으로 알아보는 나의 요괴 주거 유형!</p>
+        <button class="btn-primary" onclick="startQuiz()" style="padding: 1rem 3rem; font-weight: 700; border-radius: 30px; font-size: 1.05rem;">나의 요괴 성향 알아보기</button>
+      </div>
+
+      <!-- 퀴즈 진행 화면 -->
+      <div id="quizPlaying" style="display: none;">
+        <p class="quiz-progress-label" id="quizProgress">Q 1 / 5</p>
+        <div class="quiz-progress-bar-wrap">
+          <div class="quiz-progress-bar-fill" id="quizProgressBar" style="width: 0%;"></div>
+        </div>
+        <div class="quiz-card">
+          <div class="quiz-q" id="quizQ"></div>
+          <div class="quiz-opts" id="quizOpts"></div>
+        </div>
+      </div>
+
+      <!-- 결과 화면 -->
+      <div id="quizResult" style="display: none; text-align: center;">
+        <div style="width: 100%; max-width: 480px; margin: 0 auto 2rem; border-radius: 16px; overflow: hidden; box-shadow: 0 12px 40px rgba(46,36,22,0.18);">
+          <img id="resultImg" src="" alt="결과 카드" style="width: 100%; height: auto; display: block;" onerror="this.style.display='none'">
+        </div>
+        <div style="display: flex; justify-content: center; gap: 1rem;">
+          <button class="btn-secondary" onclick="restartQuiz()" style="flex: 1; max-width: 200px; padding: 1rem; font-weight: 700; border-radius: 30px;">다시하기</button>
+          <button class="btn-primary" onclick="shareResult()" style="flex: 1; max-width: 200px; padding: 1rem; font-weight: 700; border-radius: 30px;">결과 공유</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 장바구니 사이드 패널 -->
+  <div id="cartPanel" style="
+    position: fixed; top: 70px; right: 0; bottom: 0;
+    width: 320px; background: #fff;
+    border-left: 1px solid #e1d7c6;
+    box-shadow: -6px 0 24px rgba(46,36,22,0.08);
+    display: none; flex-direction: column;
+    z-index: 900; overflow: hidden;
+  ">
+    <div style="padding: 1.2rem 1.4rem; border-bottom: 1px solid #e1d7c6; display: flex; align-items: center; justify-content: space-between;">
+      <span style="font-family: 'Nanum Myeongjo', serif; font-size: 1.1rem; font-weight: 800;">장바구니</span>
+      <button onclick="closeCart()" style="background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 1.3rem; line-height: 1;">✕</button>
+    </div>
+    <div id="cartItems" style="flex: 1; overflow-y: auto; padding: 1rem 1.4rem;">
+      <div id="cartEmpty" style="text-align: center; padding: 3rem 0; color: var(--text-muted);">
+        <div style="font-size: 2rem; margin-bottom: 0.8rem;">🛍️</div>
+        <p style="font-size: 0.9rem;">장바구니가 비어 있어요</p>
+      </div>
+      <div id="cartList"></div>
+    </div>
+    <div style="padding: 1.2rem 1.4rem; border-top: 1px solid #e1d7c6;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <span style="font-weight: 700; color: var(--ink);">합계</span>
+        <span id="cartTotal" style="font-family: 'Nanum Myeongjo', serif; font-size: 1.2rem; font-weight: 800; color: var(--ink);">0원</span>
+      </div>
+      <button class="btn-primary" style="width: 100%; padding: 0.9rem; font-weight: 700; border-radius: 10px; font-size: 0.95rem;" onclick="showToast('준비 중인 서비스입니다 ✦')">구매하기</button>
+    </div>
+  </div>
+
+  <section id="shop" class="section">
+    <div style="max-width: 1100px; margin: 0 auto; padding: 2rem 1rem 6rem; transition: padding-right 0.3s;" id="shopInner">
+      <div class="section-header">
+        <div class="section-title">굿즈샵</div>
+        <div class="section-title-deco">
+          <span class="deco-line"></span>
+          <span class="deco-mark">✦</span>
+          <span class="deco-line"></span>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem;">
+        <div class="goods-card" onclick="addToCart('doll_geoha')">
+          <div class="goods-img-wrap">
+            <img src="images/goods_doll_geoha.png" alt="대하 인형" onerror="this.style.display='none'">
+          </div>
+          <div class="goods-info">
+            <p class="goods-name">대하 인형</p>
+            <p class="goods-price">38,000원</p>
+          </div>
+          <button class="goods-btn">장바구니 담기</button>
+        </div>
+        <div class="goods-card" onclick="addToCart('doll_seol')">
+          <div class="goods-img-wrap">
+            <img src="images/goods_doll_seol.png" alt="설 인형" onerror="this.style.display='none'">
+          </div>
+          <div class="goods-info">
+            <p class="goods-name">설 인형</p>
+            <p class="goods-price">38,000원</p>
+          </div>
+          <button class="goods-btn">장바구니 담기</button>
+        </div>
+        <div class="goods-card" onclick="addToCart('keyring_mokjeonghun')">
+          <div class="goods-img-wrap">
+            <img src="images/goods_keyring_mokjeonghun.png" alt="목정훈 키링" onerror="this.style.display='none'">
+          </div>
+          <div class="goods-info">
+            <p class="goods-name">목정훈 키링</p>
+            <p class="goods-price">9,000원</p>
+          </div>
+          <button class="goods-btn">장바구니 담기</button>
+        </div>
+        <div class="goods-card" onclick="addToCart('keyring_gumihee')">
+          <div class="goods-img-wrap">
+            <img src="images/goods_keyring_gumihee.png" alt="구미희 키링" onerror="this.style.display='none'">
+          </div>
+          <div class="goods-info">
+            <p class="goods-name">구미희 키링</p>
+            <p class="goods-price">9,000원</p>
+          </div>
+          <button class="goods-btn">장바구니 담기</button>
+        </div>
+        <div class="goods-card" onclick="addToCart('keyring_maeryeong')">
+          <div class="goods-img-wrap">
+            <img src="images/goods_keyring_maeryeong.png" alt="매령 키링" onerror="this.style.display='none'">
+          </div>
+          <div class="goods-info">
+            <p class="goods-name">매령 키링</p>
+            <p class="goods-price">9,000원</p>
+          </div>
+          <button class="goods-btn">장바구니 담기</button>
+        </div>
+        <div class="goods-card" onclick="addToCart('keyring_kimhyeonyaho')">
+          <div class="goods-img-wrap">
+            <img src="images/goods_keyring_kimhyeonyaho.png" alt="김현야호 키링" onerror="this.style.display='none'">
+          </div>
+          <div class="goods-info">
+            <p class="goods-name">김현야호 키링</p>
+            <p class="goods-price">9,000원</p>
+          </div>
+          <button class="goods-btn">장바구니 담기</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- cart 섹션은 사이드 패널로 대체됨 -->
+
+  <!-- result 섹션은 test 섹션 내부로 통합됨 -->
+
+  <!-- 토스트 알림 -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /* ── 네비게이션 ── */
+    function switchTab(tabId) {
+      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+      document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+      const cartBtn = document.getElementById('cart-icon-btn');
+      if (cartBtn) cartBtn.classList.remove('active');
+
+      // 장바구니 아이콘 클릭 시 사이드 패널 토글
+      if (tabId === 'cart') {
+        toggleCart();
+        return;
+      }
+
+      closeCart();
+      const targetSection = document.getElementById(tabId);
+      const targetNavLink = document.getElementById('nav-' + tabId);
+      if (targetSection) targetSection.classList.add('active');
+      if (targetNavLink) targetNavLink.classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    function resetToHome() { switchTab('home'); }
+
+    /* ── 장바구니 사이드 패널 ── */
+    const goodsData = {
+      doll_geoha:          { name: '대하 인형',    price: 38000 },
+      doll_seol:           { name: '설 인형',      price: 38000 },
+      keyring_mokjeonghun: { name: '목정훈 키링',  price: 9000  },
+      keyring_gumihee:     { name: '구미희 키링',  price: 9000  },
+      keyring_maeryeong:   { name: '매령 키링',    price: 9000  },
+      keyring_kimhyeonyaho:{ name: '김현야호 키링',price: 9000  },
+    };
+    let cartItems = {}; // { id: { name, price, qty } }
+
+    function toggleCart() {
+      const panel = document.getElementById('cartPanel');
+      const isOpen = panel.style.display === 'flex';
+      if (isOpen) { closeCart(); }
+      else { openCart(); }
+    }
+
+    function openCart() {
+      const panel = document.getElementById('cartPanel');
+      panel.style.display = 'flex';
+      const cartBtn = document.getElementById('cart-icon-btn');
+      if (cartBtn) cartBtn.classList.add('active');
+    }
+
+    function closeCart() {
+      document.getElementById('cartPanel').style.display = 'none';
+      const cartBtn = document.getElementById('cart-icon-btn');
+      if (cartBtn) cartBtn.classList.remove('active');
+    }
+
+    function addToCart(id) {
+      const good = goodsData[id];
+      if (!good) return;
+      if (cartItems[id]) {
+        cartItems[id].qty += 1;
+      } else {
+        cartItems[id] = { name: good.name, price: good.price, qty: 1 };
+      }
+      renderCartItems();
+      updateCartBadge();
+      openCart();
+      showToast(`🛍️ ${good.name}이(가) 담겼어요!`);
+    }
+
+    function removeFromCart(id) {
+      delete cartItems[id];
+      renderCartItems();
+      updateCartBadge();
+    }
+
+    function changeQty(id, delta) {
+      if (!cartItems[id]) return;
+      cartItems[id].qty += delta;
+      if (cartItems[id].qty <= 0) delete cartItems[id];
+      renderCartItems();
+      updateCartBadge();
+    }
+
+    function renderCartItems() {
+      const listEl = document.getElementById('cartList');
+      const emptyEl = document.getElementById('cartEmpty');
+      const totalEl = document.getElementById('cartTotal');
+
+      listEl.innerHTML = '';
+      const keys = Object.keys(cartItems);
+      if (keys.length === 0) {
+        emptyEl.style.display = 'block';
+        totalEl.innerText = '0원';
+        return;
+      }
+      emptyEl.style.display = 'none';
+
+      let total = 0;
+      keys.forEach(id => {
+        const item = cartItems[id];
+        total += item.price * item.qty;
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <span class="cart-item-name">${item.name}</span>
+          <div style="display:flex;align-items:center;gap:6px;margin:0 0.5rem;">
+            <button onclick="changeQty('${id}',-1)" style="background:none;border:1px solid #e1d7c6;border-radius:4px;width:22px;height:22px;cursor:pointer;font-size:0.9rem;line-height:1;color:var(--ink);">−</button>
+            <span style="font-size:0.88rem;font-weight:700;min-width:16px;text-align:center;">${item.qty}</span>
+            <button onclick="changeQty('${id}',1)" style="background:none;border:1px solid #e1d7c6;border-radius:4px;width:22px;height:22px;cursor:pointer;font-size:0.9rem;line-height:1;color:var(--ink);">+</button>
+          </div>
+          <span class="cart-item-price">${(item.price * item.qty).toLocaleString()}원</span>
+          <button class="cart-item-remove" onclick="removeFromCart('${id}')">✕</button>
+        `;
+        listEl.appendChild(div);
+      });
+      totalEl.innerText = total.toLocaleString() + '원';
+    }
+
+    function updateCartBadge() {
+      const badge = document.getElementById('cart-badge');
+      if (!badge) return;
+      const totalQty = Object.values(cartItems).reduce((sum, item) => sum + item.qty, 0);
+      if (totalQty > 0) {
+        badge.style.display = 'flex';
+        badge.innerText = totalQty;
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+
+    /* ── 캐릭터 슬라이더 ── */
+    let activeCharIdx = 0;
+    const charImages = ['char_01.png','char_02.png','char_03.png','char_04.png','char_05.png','char_06.png'];
+
+    function refreshCharTab() {
+      const imgEl = document.getElementById('charMainDisplay');
+      const fallbackEl = document.getElementById('charFallbackDisplay');
+      const dots = document.querySelectorAll('.c-dot');
+      if (!imgEl) return;
+      imgEl.style.display = 'block';
+      if (fallbackEl) fallbackEl.style.display = 'none';
+      imgEl.src = 'images/' + charImages[activeCharIdx];
+      dots.forEach((dot, idx) => { dot.style.opacity = (idx === activeCharIdx) ? '1' : '0.3'; });
+    }
+
+    function handleCharImgError() {
+      const imgEl = document.getElementById('charMainDisplay');
+      const fallbackEl = document.getElementById('charFallbackDisplay');
+      const fallbackTxt = document.getElementById('charFallbackText');
+      if (imgEl) imgEl.style.display = 'none';
+      if (fallbackEl) {
+        fallbackEl.style.display = 'flex';
+        fallbackTxt.innerText = `[ images/${charImages[activeCharIdx]} ]`;
+      }
+    }
+
+    function nextChar() { activeCharIdx = (activeCharIdx + 1) % charImages.length; refreshCharTab(); }
+    function prevChar() { activeCharIdx = (activeCharIdx - 1 + charImages.length) % charImages.length; refreshCharTab(); }
+    function setChar(idx) { activeCharIdx = idx; refreshCharTab(); }
+
+    /* ── 퀴즈 데이터 ── */
+    const results = {
+      maerueong:    { name: '매령',     type: '수목요괴 · 은자형',      img: 'images/result_01.png', desc: '조용히 창가를 지키는 나무처럼 차분하고 성숙한 타입' },
+      geoha:        { name: '대하',     type: '대하요괴 · 카리스마형',   img: 'images/result_02.png', desc: '대하우스의 실질적 리더! 듬직하고 거침없는 매력의 소유자' },
+      gumihee:      { name: '구미희',   type: '여우요괴 · 변신의 달인',  img: 'images/result_03.png', desc: '눈부신 매력으로 언제 어디서나 분위기를 주도하는 타입' },
+      mokjeonghun:  { name: '목정훈',   type: '목정요괴 · 모범생형',     img: 'images/result_04.png', desc: '성실하고 다정하며 주변 사람들을 상냥하게 챙기는 타입' },
+      kimhyeonyaho: { name: '김현야호', type: '야호요괴 · 유령형',       img: 'images/result_05.png', desc: '존재감이 가끔 흐려지지만 조용히 할 일을 하는 타입' },
+      seol:         { name: '설',       type: '설인요괴 · 순수형',       img: 'images/result_06.png', desc: '새하얗고 순수한 눈처럼 맑고 통통 튀는 활발한 타입' }
+    };
+
+    const quizData = [
+      {
+        q: '새벽 2시, 갑자기 배가 고프다. 나는?',
+        opts: [
+          { text: '참는다. 어차피 자면 잊는다',              scores: { maerueong: 3, kimhyeonyaho: 2 } },
+          { text: '동거인을 깨워 같이 먹자고 한다',           scores: { seol: 3, gumihee: 2 } },
+          { text: '냉장고를 열어 있는 걸 다 꺼낸다',          scores: { geoha: 3, gumihee: 1 } },
+          { text: '요리를 시작한다. 이왕이면 거하게',          scores: { mokjeonghun: 3, geoha: 1 } }
+        ]
+      },
+      {
+        q: '동거인이 내 물건을 몰래 썼다는 사실을 알았다. 나는?',
+        opts: [
+          { text: '나도 그의 물건을 몰래 쓴다. 이건 관습이다', scores: { gumihee: 3, seol: 1 } },
+          { text: '모른 척 넘어간다. 크게 중요하지 않으니',    scores: { kimhyeonyaho: 3, maerueong: 2 } },
+          { text: '직접 말한다. 솔직하게, 그러나 상냥하게',    scores: { mokjeonghun: 3, geoha: 2 } },
+          { text: '쪽지를 남긴다. 말하기가 좀 그래서',         scores: { maerueong: 3, kimhyeonyaho: 1 } }
+        ]
+      },
+      {
+        q: '대하우스 거실에서 이상한 소리가 난다. 나는?',
+        opts: [
+          { text: '소리의 정체가 뭔지 기록해 둔다',            scores: { mokjeonghun: 3, maerueong: 1 } },
+          { text: '즉시 달려가 확인한다',                      scores: { geoha: 3, seol: 2 } },
+          { text: '문을 잠그고 이불을 뒤집어 쓴다',            scores: { kimhyeonyaho: 3, maerueong: 1 } },
+          { text: '귀신인지 의심하며 소금을 뿌린다',            scores: { gumihee: 3, seol: 2 } }
+        ]
+      },
+      {
+        q: '오늘 내 감정 상태는?',
+        opts: [
+          { text: '차분하고 조용하다',          scores: { maerueong: 3, kimhyeonyaho: 2 } },
+          { text: '기운차고 활기차다',           scores: { seol: 3, gumihee: 2 } },
+          { text: '감정? 오늘 밥은 먹었나',      scores: { geoha: 3, mokjeonghun: 1 } },
+          { text: '알 수 없다, 뭔가 묘하다',     scores: { gumihee: 3, kimhyeonyaho: 1 } }
+        ]
+      },
+      {
+        q: '내가 요괴라면, 어떤 능력을 가지고 싶을까?',
+        opts: [
+          { text: '성실하게 세상을 돕는 정화 능력',     scores: { mokjeonghun: 3, geoha: 2 } },
+          { text: '투명인간 — 보이지 않고 관찰만',      scores: { kimhyeonyaho: 3, maerueong: 2 } },
+          { text: '변신 — 누구든 될 수 있다',          scores: { gumihee: 3, geoha: 1 } },
+          { text: '모두를 행복하게 만드는 눈꽃 마법',   scores: { seol: 3, mokjeonghun: 1 } }
+        ]
+      }
+    ];
+
+    let quizStep = 0;
+    let userScores = {};
+
+    function resetScores() {
+      userScores = { kimhyeonyaho: 0, maerueong: 0, seol: 0, gumihee: 0, mokjeonghun: 0, geoha: 0 };
+    }
+
+    function startQuiz() {
+      quizStep = 0;
+      resetScores();
+      document.getElementById('quizStart').style.display = 'none';
+      document.getElementById('quizResult').style.display = 'none';
+      document.getElementById('quizPlaying').style.display = 'block';
+      renderQuiz();
+    }
+
+    function renderQuiz() {
+      const current = quizData[quizStep];
+      const total = quizData.length;
+
+      document.getElementById('quizProgress').innerText = `Q ${quizStep + 1} / ${total}`;
+      document.getElementById('quizProgressBar').style.width = `${(quizStep / total) * 100}%`;
+      document.getElementById('quizQ').innerText = current.q;
+
+      const optsEl = document.getElementById('quizOpts');
+      optsEl.innerHTML = '';
+
+      current.opts.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt';
+        btn.innerText = opt.text;
+        btn.onclick = function () {
+          // 중복 클릭 방지
+          optsEl.querySelectorAll('.quiz-opt').forEach(b => b.disabled = true);
+          for (let key in opt.scores) { userScores[key] += opt.scores[key]; }
+          quizStep++;
+          setTimeout(() => {
+            if (quizStep < quizData.length) { renderQuiz(); }
+            else { showQuizResult(); }
+          }, 200);
+        };
+        optsEl.appendChild(btn);
+      });
+    }
+
+    function showQuizResult() {
+      document.getElementById('quizPlaying').style.display = 'none';
+      document.getElementById('quizResult').style.display = 'block';
+
+      let maxScore = -1;
+      let finalKey = 'gumihee';
+      for (let key in userScores) {
+        if (userScores[key] > maxScore) { maxScore = userScores[key]; finalKey = key; }
+      }
+
+      const ch = results[finalKey];
+      const imgEl = document.getElementById('resultImg');
+      imgEl.src = ch.img;
+      imgEl.style.display = 'block';
+      document.getElementById('quizProgressBar').style.width = '100%';
+      window.scrollTo(0, 0);
+    }
+
+    function restartQuiz() {
+      quizStep = 0;
+      resetScores();
+      document.getElementById('quizResult').style.display = 'none';
+      document.getElementById('quizPlaying').style.display = 'none';
+      document.getElementById('quizStart').style.display = 'block';
+      window.scrollTo(0, 0);
+    }
+
+    /* ── 토스트 & 공유 ── */
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.innerText = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    function shareResult() {
+      navigator.clipboard.writeText(window.location.href)
+        .then(() => showToast('🔗 결과 링크가 복사되었습니다!'))
+        .catch(() => showToast('주소창 링크를 직접 복사해 주세요!'));
+    }
+  </script>
+</body>
+</html>
