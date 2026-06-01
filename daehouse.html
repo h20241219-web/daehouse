@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>대하우스: 요괴들의 비밀스러운 동거</title>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-main: #F5EFE6;
+    --bg-card: #EDE4D5;
+    --bg-accent: #E2D5C0;
+    --bg-deep: #CFC0A5;
+    --text-primary: #2E2416;
+    --text-secondary: #5C4A30;
+    --text-muted: #8C7A60;
+    --border: #D4C4A8;
+    --border-light: #E8DCC8;
+    --ink: #1A1208;
+    --gold: #A07840;
+    --gold-light: #C4A060;
+    --red-accent: #8B2020;
+    --white-soft: #FAF6EF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg-main);
+    color: var(--text-primary);
+    font-family: 'Noto Serif KR', serif;
+    min-height: 100vh;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(245,239,230,0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2.5rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: 0.05em;
+    text-decoration: none;
+  }
+
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    list-style: none;
+    align-items: center;
+  }
+
+  .nav-tabs li a {
+    display: block;
+    padding: 0 1.25rem;
+    height: 64px;
+    line-height: 64px;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+
+  .nav-tabs li a:hover,
+  .nav-tabs li a.active {
+    color: var(--ink);
+    border-bottom-color: var(--gold);
+  }
+
+  .cart-btn {
+    position: relative;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+
+  .cart-btn:hover { background: var(--bg-card); }
+
+  .cart-btn svg { width: 18px; height: 18px; stroke: var(--text-secondary); fill: none; stroke-width: 1.5; }
+
+  .cart-badge {
+    position: absolute;
+    top: -4px; right: -4px;
+    background: var(--red-accent);
+    color: #fff;
+    font-size: 10px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: sans-serif;
+    display: none;
+  }
+
+  /* ─── SECTIONS ─── */
+  .section { display: none; padding-top: 64px; min-height: 100vh; }
+  .section.active { display: block; }
+
+  /* ─── HOME (수정: 전체 이미지화 레이아웃) ─── */
+  #home {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+  }
+  #home.active { display: flex; }
+
+  .home-hero {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .home-main-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(46,36,22,0.15);
+  }
+
+  .home-main-placeholder {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: var(--bg-accent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    border-radius: 4px;
+    border: 1px dashed var(--border);
+  }
+
+  /* ─── CHARACTERS (수정: 가로 이미지 4:3 비율 변경) ─── */
+  #characters {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+  }
+  #characters.active { display: flex; }
+
+  .section-header {
+    text-align: center;
+    padding: 3.5rem 2rem 2rem;
+  }
+
+  .section-title {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: 0.05em;
+  }
+
+  .section-title-deco {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 0.75rem;
+  }
+
+  .deco-line {
+    flex: 1;
+    max-width: 80px;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .deco-mark {
+    font-size: 1rem;
+    color: var(--gold);
+  }
+
+  .char-carousel-wrap {
+    width: 100%;
+    max-width: 1100px;
+    padding: 1rem 2rem 4rem;
+    position: relative;
+  }
+
+  .char-carousel {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 1rem 0.5rem 1.5rem;
+    cursor: grab;
+  }
+
+  .char-carousel:active { cursor: grabbing; }
+  .char-carousel::-webkit-scrollbar { display: none; }
+
+  .char-card {
+    scroll-snap-align: center;
+    flex: 0 0 100%;
+    background: var(--white-soft);
+    border: 1px solid var(--border-light);
+    border-radius: 2px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+  }
+
+  .char-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(46,36,22,0.12);
+  }
+
+  .char-card-img {
+    width: 100%;
+    aspect-ratio: 4/3; /* 세로 3:4에서 가로 4:3으로 변경 */
+    object-fit: cover;
+    display: block;
+    background: var(--bg-accent);
+  }
+
+  .char-card-img-placeholder {
+    width: 100%;
+    aspect-ratio: 4/3; /* 비율 변경 */
+    background: var(--bg-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .char-card-img-placeholder span {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+
+  .char-card-body {
+    padding: 1.25rem 1.25rem 1.5rem;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .char-name {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: 0.05em;
+  }
+
+  .char-type {
+    font-size: 0.75rem;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    margin-top: 0.25rem;
+  }
+
+  .char-desc {
+    font-size: 0.825rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin-top: 0.75rem;
+  }
+
+  .carousel-nav {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .carousel-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    border: none;
+    padding: 0;
+  }
+
+  .carousel-dot.active {
+    background: var(--gold);
+    transform: scale(1.3);
+  }
+
+  .carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-60%);
+    background: var(--white-soft);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.2s;
+    color: var(--text-secondary);
+  }
+
+  .carousel-arrow:hover { background: var(--bg-accent); }
+  .carousel-arrow.left { left: 0; }
+  .carousel-arrow.right { right: 0; }
+
+  .carousel-arrow svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+  /* ─── WORLDVIEW ─── */
+  #worldview { background: var(--bg-main); }
+
+  .world-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 3.5rem 2rem 5rem;
+  }
+
+  .world-content .section-header { padding: 0 0 2.5rem; }
+
+  .world-block {
+    background: var(--white-soft);
+    border: 1px solid var(--border-light);
+    border-left: 3px solid var(--gold);
+    padding: 1.75rem 2rem;
+    margin-bottom: 1.5rem;
+    border-radius: 1px;
+  }
+
+  .world-block-title {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: 0.06em;
+    margin-bottom: 0.75rem;
+  }
+
+  .world-block p {
+    font-size: 0.9rem;
+    line-height: 2;
+    color: var(--text-secondary);
+  }
+
+  /* ─── QUIZ (수정: 결과 이미지 및 공유 버튼 추가) ─── */
+  #quiz {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+  }
+  #quiz.active { display: flex; }
+
+  .quiz-wrap {
+    max-width: 640px;
+    width: 100%;
+    padding: 3rem 2rem 5rem;
+  }
+
+  .quiz-card {
+    background: var(--white-soft);
+    border: 1px solid var(--border-light);
+    border-radius: 2px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+  }
+
+  .quiz-progress {
+    font-size: 0.75rem;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    margin-bottom: 1rem;
+  }
+
+  .quiz-q {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .quiz-opt {
+    background: var(--bg-main);
+    border: 1px solid var(--border);
+    padding: 0.9rem 1.25rem;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    border-radius: 1px;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+    font-family: 'Noto Serif KR', serif;
+    text-align: left;
+    line-height: 1.6;
+  }
+
+  .quiz-opt:hover {
+    background: var(--bg-accent);
+    border-color: var(--gold-light);
+    color: var(--ink);
+  }
+
+  .quiz-result {
+    display: none;
+    background: var(--white-soft);
+    border: 1px solid var(--border-light);
+    border-radius: 2px;
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .quiz-result-img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 0 auto 1.5rem;
+    display: block;
+    background: var(--bg-accent);
+    border: 2px solid var(--border);
+  }
+
+  .quiz-result-name {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+
+  .quiz-result-type {
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+
+  .quiz-result-desc {
+    font-size: 0.9rem;
+    line-height: 2;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+  }
+
+  .quiz-btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .quiz-restart, .quiz-share {
+    background: none;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 0.75rem 1.5rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-family: 'Noto Serif KR', serif;
+    letter-spacing: 0.1em;
+    transition: background 0.2s, color 0.2s;
+    border-radius: 1px;
+    flex: 1;
+    max-width: 160px;
+  }
+
+  .quiz-restart:hover {
+    background: var(--gold);
+    color: var(--white-soft);
+  }
+
+  .quiz-share {
+    background: var(--gold);
+    color: var(--white-soft);
+  }
+  
+  .quiz-share:hover {
+    background: var(--gold-light);
+    border-color: var(--gold-light);
+  }
+
+  /* ─── GOODS ─── */
+  #goods {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+  }
+  #goods.active { display: flex; }
+
+  .goods-wrap {
+    max-width: 1100px;
+    width: 100%;
+    padding: 0 2rem 5rem;
+  }
+
+  .goods-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .goods-card {
+    background: var(--white-soft);
+    border: 1px solid var(--border-light);
+    border-radius: 1px;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+
+  .goods-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(46,36,22,0.1);
+  }
+
+  .goods-img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    display: block;
+    background: var(--bg-accent);
+  }
+
+  .goods-img-placeholder {
+    width: 100%;
+    aspect-ratio: 1/1;
+    background: var(--bg-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .goods-img-placeholder span {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+  }
+
+  .goods-info {
+    padding: 1rem 1rem 1.25rem;
+  }
+
+  .goods-name {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: 0.03em;
+  }
+
+  .goods-price {
+    font-size: 0.825rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+    letter-spacing: 0.04em;
+  }
+
+  .goods-add-btn {
+    display: block;
+    width: calc(100% - 2rem);
+    margin: 0.25rem 1rem 1rem;
+    background: var(--bg-main);
+    border: 1px solid var(--border);
+    padding: 0.6rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-family: 'Noto Serif KR', serif;
+    color: var(--text-primary);
+    letter-spacing: 0.08em;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+    border-radius: 1px;
+  }
+
+  .goods-add-btn:hover {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--white-soft);
+  }
+
+  /* ─── CART DRAWER ─── */
+  .cart-overlay {
+    position: fixed; inset: 0;
+    background: rgba(46,36,22,0.4);
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .cart-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .cart-drawer {
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    width: 380px;
+    max-width: 100vw;
+    background: var(--white-soft);
+    border-left: 1px solid var(--border);
+    z-index: 300;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    display: flex; flex-direction: column;
+  }
+
+  .cart-drawer.open { transform: translateX(0); }
+
+  .cart-drawer-head {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-light);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .cart-drawer-title {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: 0.06em;
+  }
+
+  .cart-close {
+    background: none; border: none;
+    cursor: pointer; font-size: 1.2rem; color: var(--text-muted);
+    line-height: 1;
+  }
+
+  .cart-body {
+    flex: 1; overflow-y: auto; padding: 1rem 1.5rem;
+  }
+
+  .cart-empty {
+    text-align: center;
+    padding: 3rem 0;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+  }
+
+  .cart-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-light);
+    align-items: center;
+  }
+
+  .cart-item-img {
+    width: 56px; height: 56px;
+    object-fit: cover;
+    background: var(--bg-accent);
+    flex-shrink: 0;
+    border-radius: 1px;
+  }
+
+  .cart-item-name {
+    font-size: 0.875rem;
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  .cart-item-price {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+  }
+
+  .cart-item-qty {
+    display: flex; align-items: center; gap: 0.5rem;
+    margin-top: 0.4rem;
+  }
+
+  .qty-btn {
+    width: 22px; height: 22px;
+    border: 1px solid var(--border);
+    background: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1;
+    transition: background 0.2s;
+  }
+
+  .qty-btn:hover { background: var(--bg-accent); }
+
+  .qty-num {
+    font-size: 0.875rem;
+    color: var(--ink);
+    min-width: 16px;
+    text-align: center;
+    font-family: sans-serif;
+  }
+
+  .cart-item-del {
+    margin-left: auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 1rem;
+    flex-shrink: 0;
+    transition: color 0.2s;
+  }
+
+  .cart-item-del:hover { color: var(--red-accent); }
+
+  .cart-footer {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .cart-total {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .cart-total-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+
+  .cart-total-price {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .cart-checkout {
+    width: 100%;
+    background: var(--ink);
+    color: var(--white-soft);
+    border: none;
+    padding: 0.9rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    font-family: 'Noto Serif KR', serif;
+    letter-spacing: 0.12em;
+    transition: background 0.2s;
+    border-radius: 1px;
+  }
+
+  .cart-checkout:hover { background: var(--text-secondary); }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed;
+    bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(12px);
+    background: var(--ink);
+    color: var(--white-soft);
+    padding: 0.7rem 1.5rem;
+    font-size: 0.825rem;
+    letter-spacing: 0.08em;
+    border-radius: 2px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+    white-space: nowrap;
+    z-index: 500;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    border-top: 1px solid var(--border-light);
+  }
+
+  /* ─── IMG FALLBACK ─── */
+  img.goods-img, img.char-card-img {
+    background: var(--bg-accent);
+  }
+
+  @media (max-width: 640px) {
+    nav { padding: 0 1rem; }
+    .nav-logo { font-size: 0.9rem; }
+    .nav-tabs li a { padding: 0 0.7rem; font-size: 0.78rem; }
+    .char-carousel-wrap { padding: 1rem 1rem 3rem; }
+    .carousel-arrow { display: none; }
+    .goods-wrap { padding: 0 1rem 4rem; }
+    .cart-drawer { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#" onclick="showSection('home')">대하우스</a>
+  <ul class="nav-tabs">
+    <li><a href="#" class="active" onclick="showSection('home')">홈</a></li>
+    <li><a href="#" onclick="showSection('characters')">캐릭터</a></li>
+    <li><a href="#" onclick="showSection('worldview')">세계관</a></li>
+    <li><a href="#" onclick="showSection('quiz')">유형 테스트</a></li>
+    <li><a href="#" onclick="showSection('goods')">굿즈샵</a></li>
+  </ul>
+  <button class="cart-btn" onclick="toggleCart()" aria-label="장바구니">
+    <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    <span class="cart-badge" id="cartBadge">0</span>
+  </button>
+</nav>
+
+<section id="home" class="section active">
+  <div class="home-hero">
+    <img src="images/home_main.png" alt="대하우스 메인" class="home-main-img"
+      onerror="this.style.display='none';document.getElementById('home-main-fallback').style.display='flex'">
+    
+    <div id="home-main-fallback" class="home-main-placeholder" style="display:none;">
+      <h1 style="font-family:'Nanum Myeongjo',serif;font-size:2.2rem;font-weight:800;color:var(--ink);letter-spacing:0.06em;line-height:1.5; text-align: center;">
+        대하우스<br>
+        <span style="font-size:1.1rem;font-weight:400;color:var(--text-secondary);letter-spacing:0.12em">요괴들의 비밀스러운 동거</span>
+      </h1>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">[여기에 images/home_main.png 파일을 넣어주세요]</p>
+    </div>
+  </div>
+</section>
+
+<section id="characters" class="section">
+  <div class="section-header">
+    <div class="section-title">캐릭터</div>
+    <div class="section-title-deco">
+      <span class="deco-line"></span>
+      <span class="deco-mark">✦</span>
+      <span class="deco-line"></span>
+    </div>
+  </div>
+
+  <div class="char-carousel-wrap">
+    <button class="carousel-arrow left" onclick="scrollCarousel(-1)" aria-label="이전">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+
+    <div class="char-carousel" id="charCarousel">
+
+      <div class="char-card">
+        <img src="images/char_01.png" alt="캐릭터 1" class="char-card-img"
+          onerror="this.outerHTML='<div class=\'char-card-img-placeholder\'><span>char_01.png (4:3)</span></div>'">
+        <div class="char-card-body">
+          <div class="char-name">캐릭터 이름 1</div>
+          <div class="char-type">종족 · 역할</div>
+          <p class="char-desc">여기에 캐릭터 상세 설명 문구를 채워 넣을 수 있습니다.</p>
+        </div>
+      </div>
+
+      <div class="char-card">
+        <img src="images/char_02.png" alt="캐릭터 2" class="char-card-img"
+          onerror="this.outerHTML='<div class=\'char-card-img-placeholder\'><span>char_02.png (4:3)</span></div>'">
+        <div class="char-card-body">
+          <div class="char-name">캐릭터 이름 2</div>
+          <div class="char-type">종족 · 역할</div>
+          <p class="char-desc">여기에 캐릭터 상세 설명 문구를 채워 넣을 수 있습니다.</p>
+        </div>
+      </div>
+
+      <div class="char-card">
+        <img src="images/char_03.png" alt="캐릭터 3" class="char-card-img"
+          onerror="this.outerHTML='<div class=\'char-card-img-placeholder\'><span>char_03.png (4:3)</span></div>'">
+        <div class="char-card-body">
+          <div class="char-name">캐릭터 이름 3</div>
+          <div class="char-type">종족 · 역할</div>
+          <p class="char-desc">여기에 캐릭터 상세 설명 문구를 채워 넣을 수 있습니다.</p>
+        </div>
+      </div>
+
+      <div class="char-card">
+        <img src="images/char_04.png" alt="캐릭터 4" class="char-card-img"
+          onerror="this.outerHTML='<div class=\'char-card-img-placeholder\'><span>char_04.png (4:3)</span></div>'">
+        <div class="char-card-body">
+          <div class="char-name">캐릭터 이름 4</div>
+          <div class="char-type">종족 · 역할</div>
+          <p class="char-desc">여기에 캐릭터 상세 설명 문구를 채워 넣을 수 있습니다.</p>
+        </div>
+      </div>
+
+      <div class="char-card">
+        <img src="images/char_05.png" alt="캐릭터 5" class="char-card-img"
+          onerror="this.outerHTML='<div class=\'char-card-img-placeholder\'><span>char_05.png (4:3)</span></div>'">
+        <div class="char-card-body">
+          <div class="char-name">캐릭터 이름 5</div>
+          <div class="char-type">종족 · 역할</div>
+          <p class="char-desc">여기에 캐릭터 상세 설명 문구를 채워 넣을 수 있습니다.</p>
+        </div>
+      </div>
+
+      <div class="char-card">
+        <img src="images/char_06.png" alt="캐릭터 6" class="char-card-img"
+          onerror="this.outerHTML='<div class=\'char-card-img-placeholder\'><span>char_06.png (4:3)</span></div>'">
+        <div class="char-card-body">
+          <div class="char-name">캐릭터 이름 6</div>
+          <div class="char-type">종족 · 역할</div>
+          <p class="char-desc">여기에 캐릭터 상세 설명 문구를 채워 넣을 수 있습니다.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="carousel-arrow right" onclick="scrollCarousel(1)" aria-label="다음">
+      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+
+    <div class="carousel-nav" id="carouselDots"></div>
+  </div>
+</section>
+
+<section id="worldview" class="section">
+  <div class="world-content">
+    <div class="section-header">
+      <div class="section-title">세계관</div>
+      <div class="section-title-deco">
+        <span class="deco-line"></span>
+        <span class="deco-mark">✦</span>
+        <span class="deco-line"></span>
+      </div>
+    </div>
+
+    <div class="world-block">
+      <div class="world-block-title">대하우스란?</div>
+      <p>인간과 요괴가 아무렇지 않게 한 지붕 아래 살아가는 집. 외벽엔 낡은 나무 패널이 붙어 있고, 주방에는 늘 이상한 냄새가 풍기지만, 이곳에서 벌어지는 소동들은 어딘가 따뜻하다.</p>
+    </div>
+
+    <div class="world-block">
+      <div class="world-block-title">공간의 규칙</div>
+      <p>대하우스 안에서 요괴들은 반드시 인간의 모습을 유지해야 한다. 그러나 밤 열두 시가 지나면 이 규칙은 효력을 잃고, 집 안 곳곳이 기묘한 광경으로 뒤바뀐다.</p>
+    </div>
+
+    <div class="world-block">
+      <div class="world-block-title">비밀 계약</div>
+      <p>이곳의 세입자가 되려면 '비밀 계약서'에 서명해야 한다. 내용은 단 한 줄 — <em>"이 집에서 본 것을 밖에서 말하지 않는다."</em> 위반 시 어떤 일이 생기는지는, 아직 아무도 모른다.</p>
+    </div>
+
+    <div class="world-block">
+      <div class="world-block-title">주인장 거하</div>
+      <p>대하우스의 실질적 관리자. 정체불명의 나이와 정체불명의 종족. 늘 따뜻한 차를 내어주며, 모든 소동의 끝에서 조용히 웃고 있다.</p>
+    </div>
+  </div>
+</section>
+
+<section id="quiz" class="section">
+  <div class="quiz-wrap">
+    <div class="section-header" style="padding:3rem 0 2rem;text-align:center">
+      <div class="section-title">유형 테스트</div>
+      <div class="section-title-deco">
+        <span class="deco-line"></span>
+        <span class="deco-mark">✦</span>
+        <span class="deco-line"></span>
+      </div>
+      <p style="font-size:0.85rem;color:var(--text-muted);margin-top:1rem;letter-spacing:0.08em">나는 대하우스에서 어떤 요괴일까?</p>
+    </div>
+
+    <div class="quiz-card" id="quizCard">
+      <div class="quiz-progress" id="quizProgress">Q 1 / 5</div>
+      <div class="quiz-q" id="quizQ">새벽 2시, 갑자기 배가 고프다. 나는?</div>
+      <div class="quiz-options" id="quizOpts"></div>
+    </div>
+
+    <div class="quiz-result" id="quizResult">
+      <img src="" id="resultImg" class="quiz-result-img" alt="결과 이미지" 
+        onerror="this.style.background='var(--bg-accent)'; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><text y=\'50%\' x=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%238c7a60\' font-size=\'11\'>No Image</text></svg>'">
+      <div class="quiz-result-name" id="resultName"></div>
+      <div class="quiz-result-type" id="resultType"></div>
+      <p class="quiz-result-desc" id="resultDesc"></p>
+      
+      <div class="quiz-btn-group">
+        <button class="quiz-restart" onclick="restartQuiz()">다시 하기</button>
+        <button class="quiz-share" onclick="shareResult()">결과 공유</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="goods" class="section">
+  <div class="section-header">
+    <div class="section-title">굿즈샵</div>
+    <div class="section-title-deco">
+      <span class="deco-line"></span>
+      <span class="deco-mark">✦</span>
+      <span class="deco-line"></span>
+    </div>
+  </div>
+
+  <div class="goods-wrap">
+    <div class="goods-grid" id="goodsGrid"></div>
+  </div>
+</section>
+
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-drawer-head">
+    <span class="cart-drawer-title">장바구니</span>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty" id="cartEmpty">장바구니가 비어 있습니다.</div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span class="cart-total-label">합계</span>
+      <span class="cart-total-price" id="cartTotal">₩0</span>
+    </div>
+    <button class="cart-checkout">구매하기</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>© 대하우스: 요괴들의 비밀스러운 동거</footer>
+
+<script>
+/* ─── NAV ─── */
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tabs a').forEach(a => a.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const links = document.querySelectorAll('.nav-tabs a');
+  const map = {home:0,characters:1,worldview:2,quiz:3,goods:4};
+  links[map[id]].classList.add('active');
+  window.scrollTo(0,0);
+  return false;
+}
+
+/* ─── CAROUSEL ─── */
+const carousel = document.getElementById('charCarousel');
+const cards = carousel ? carousel.querySelectorAll('.char-card') : [];
+const dotsWrap = document.getElementById('carouselDots');
+
+function buildDots() {
+  if (!dotsWrap) return;
+  dotsWrap.innerHTML = '';
+  cards.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => {
+      cards[i].scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+    };
+    dotsWrap.appendChild(d);
+  });
+}
+
+function updateDots() {
+  if (!carousel || !dotsWrap) return;
+  const scrollLeft = carousel.scrollLeft;
+  const cardW = cards[0] ? cards[0].offsetWidth : carousel.offsetWidth;
+  const idx = Math.round(scrollLeft / cardW);
+  dotsWrap.querySelectorAll('.carousel-dot').forEach((d,i) => {
+    d.classList.toggle('active', i === idx);
+  });
+}
+
+function scrollCarousel(dir) {
+  if (!carousel) return;
+  const cardW = cards[0] ? cards[0].offsetWidth : carousel.offsetWidth;
+  carousel.scrollBy({left: dir * cardW, behavior: 'smooth'});
+}
+
+if (carousel) {
+  buildDots();
+  carousel.addEventListener('scroll', updateDots);
+
+  // drag to scroll
+  let isDown = false, startX, scrollLeft;
+  carousel.addEventListener('mousedown', e => {
+    isDown = true; carousel.classList.add('active');
+    startX = e.pageX - carousel.offsetLeft;
+    scrollLeft = carousel.scrollLeft;
+  });
+  carousel.addEventListener('mouseleave', () => { isDown = false; });
+  carousel.addEventListener('mouseup', () => { isDown = false; });
+  carousel.addEventListener('mousemove', e => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - carousel.offsetLeft;
+    carousel.scrollLeft = scrollLeft - (x - startX) * 1.2;
+  });
+}
+
+/* ─── GOODS DATA (수정: 인형 세트 개별 분리 및 이미지 파일명 지정) ─── */
+const goodsData = [
+  { id: 1, name: '거하 인형', price: 15000, img: 'images/goods_doll_geoha.png' },
+  { id: 6, name: '설이 인형', price: 15000, img: 'images/goods_doll_seol.png' },
+  { id: 2, name: '목정훈 키링', price: 9800, img: 'images/goods_keyring_mokjeonghun.png' },
+  { id: 3, name: '구미희 키링', price: 9800, img: 'images/goods_keyring_gumihee.png' },
+  { id: 4, name: '매령 키링', price: 9800, img: 'images/goods_keyring_maeryeong.png' },
+  { id: 5, name: '김현야호 키링', price: 9800, img: 'images/goods_keyring_kimhyeonyaho.png' },
+];
+
+function renderGoods() {
+  const grid = document.getElementById('goodsGrid');
+  grid.innerHTML = goodsData.map(g => `
+    <div class="goods-card">
+      <img src="${g.img}" alt="${g.name}" class="goods-img"
+        onerror="this.outerHTML='<div class=\'goods-img-placeholder\'><span>${g.img.split('/').pop()}</span></div>'">
+      <div class="goods-info">
+        <div class="goods-name">${g.name}</div>
+        <div class="goods-price">₩${g.price.toLocaleString()}</div>
+      </div>
+      <button class="goods-add-btn" onclick="addToCart(${g.id})">장바구니에 담기</button>
+    </div>
+  `).join('');
+}
+renderGoods();
+
+/* ─── CART ─── */
+let cart = {};
+
+function addToCart(id) {
+  const item = goodsData.find(g => g.id === id);
+  if (!item) return;
+  cart[id] = cart[id] || { ...item, qty: 0 };
+  cart[id].qty++;
+  renderCart();
+  showToast(`${item.name} 담겼어요`);
+}
+
+function changeQty(id, delta) {
+  if (!cart[id]) return;
+  cart[id].qty += delta;
+  if (cart[id].qty <= 0) delete cart[id];
+  renderCart();
+}
+
+function removeItem(id) {
+  delete cart[id];
+  renderCart();
+}
+
+function renderCart() {
+  const items = Object.values(cart);
+  const badge = document.getElementById('cartBadge');
+  const total = items.reduce((s, i) => s + i.price * i.qty, 0);
+  const count = items.reduce((s, i) => s + i.qty, 0);
+
+  badge.style.display = count > 0 ? 'flex' : 'none';
+  badge.textContent = count;
+
+  document.getElementById('cartTotal').textContent = '₩' + total.toLocaleString();
+
+  const body = document.getElementById('cartBody');
+  const empty = document.getElementById('cartEmpty');
+
+  if (items.length === 0) {
+    body.innerHTML = '';
+    body.appendChild(empty);
+    empty.style.display = 'block';
+    return;
+  }
+
+  body.innerHTML = items.map(i => `
+    <div class="cart-item">
+      <img src="${i.img}" class="cart-item-img" alt="${i.name}"
+        onerror="this.style.background='var(--bg-accent)'">
+      <div style="flex:1;min-width:0">
+        <div class="cart-item-name">${i.name}</div>
+        <div class="cart-item-price">₩${i.price.toLocaleString()}</div>
+        <div class="cart-item-qty">
+          <button class="qty-btn" onclick="changeQty(${i.id},-1)">−</button>
+          <span class="qty-num">${i.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${i.id},1)">+</button>
+        </div>
+      </div>
+      <button class="cart-item-del" onclick="removeItem(${i.id})">✕</button>
+    </div>
+  `).join('');
+}
+
+function toggleCart() {
+  const drawer = document.getElementById('cartDrawer');
+  const overlay = document.getElementById('cartOverlay');
+  drawer.classList.toggle('open');
+  overlay.classList.toggle('open');
+}
+
+/* ─── TOAST ─── */
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+/* ─── QUIZ DATA & LOGIC ─── */
+const quizData = [
+  {
+    q: '새벽 2시, 갑자기 배가 고프다. 나는?',
+    opts: ['냉장고를 열어 있는 걸 다 꺼낸다', '참는다. 어차피 자면 잊는다', '동거인을 깨워 같이 먹자고 한다', '요리를 시작한다. 이왕이면 거하게'],
+    score: [1, 2, 3, 4]
+  },
+  {
+    q: '동거인이 내 물건을 몰래 썼다는 사실을 알았다. 나는?',
+    opts: ['직접 말한다. 솔직하게, 그러나 상냥하게', '모른 척 넘어간다. 크게 중요하지 않으니', '쪽지를 남긴다. 말하기가 좀 그래서', '나도 그의 물건을 몰래 쓴다. 이건 관습이다'],
+    score: [4, 2, 1, 3]
+  },
+  {
+    q: '대하우스 거실에서 이상한 소리가 난다. 나는?',
+    opts: ['즉시 달려가 확인한다', '문을 잠그고 이불을 뒤집어 쓴다', '귀신인지 의심하며 소금을 뿌린다', '소리의 정체가 뭔지 기록해 둔다'],
+    score: [3, 1, 2, 4]
+  },
+  {
+    q: '오늘 내 감정 상태는?',
+    opts: ['기운차고 활기차다', '차분하고 조용하다', '알 수 없다, 뭔가 묘하다', '감정? 오늘 밥은 먹었나'],
+    score: [3, 2, 4, 1]
+  },
+  {
+    q: '내가 요괴라면, 어떤 능력을 가지고 싶을까?',
+    opts: ['변신 — 누구든 될 수 있다', '투명 — 보이지 않고 관찰만', '예지 — 미래를 미리 안다', '무한 식욕 — 뭐든 먹어도 괜찮다'],
+    score: [3, 2, 4, 1]
+  }
+];
+
+/* 수정: 결과 이미지 경로 지정 (images/result_이름.png 양식) */
+const results = [
+  { name: '구미희', type: '여우요괴 · 변신의 달인', img: 'images/result_gumihee.png', desc: '눈부신 매력과 수백 년의 지혜를 가진 여우. 겉으론 우아하지만 속으론 의외로 장난기 가득. 대하우스에서 제일 소문이 많은 입주자.' },
+  { name: '매령', type: '수목요괴 · 은자형', img: 'images/result_maeryeong.png', desc: '조용히 창가에 앉아 차를 마시는 걸 즐기는 수목요괴. 말수는 적지만 꼭 필요한 말만 하며, 그 말은 늘 맞다. 식물들이 그를 좋아한다.' },
+  { name: '김현야호', type: '야호요괴 · 유령형', img: 'images/result_kimhyeonyaho.png', desc: '존재감이 옅어서 자주 잊혀지는 야호. 억울하지만 그냥 넘긴다. 사실 이 집에서 가장 모든 걸 알고 있는 인물이다.' },
+  { name: '거하', type: '대하요괴 · 카리스마형', img: 'images/result_geoha.png', desc: '대하우스의 실질적 주인. 위압적인 겉모습과 달리 의외로 자상하다. 요리 실력은 압도적이며, 새벽 냉장고를 제일 많이 열어본다.' },
+];
+
+let quizStep = 0;
+let quizScoreSum = 0;
+
+function renderQuiz() {
+  const d = quizData[quizStep];
+  document.getElementById('quizProgress').textContent = `Q ${quizStep+1} / ${quizData.length}`;
+  document.getElementById('quizQ').textContent = d.q;
+  const opts = document.getElementById('quizOpts');
+  opts.innerHTML = d.opts.map((o, i) => `
+    <button class="quiz-opt" onclick="answerQuiz(${d.score[i]})">${o}</button>
+  `).join('');
+}
+
+function answerQuiz(score) {
+  quizScoreSum += score;
+  quizStep++;
+  if (quizStep >= quizData.length) {
+    showResult();
+  } else {
+    renderQuiz();
+  }
+}
+
+function showResult() {
+  const avg = quizScoreSum / quizData.length;
+  let idx;
+  if (avg < 1.8) idx = 2;
+  else if (avg < 2.5) idx = 1;
+  else if (avg < 3.3) idx = 0;
+  else idx = 3;
+  
+  const r = results[idx];
+  document.getElementById('resultImg').src = r.img; // 결과 이미지 삽입
+  document.getElementById('resultName').textContent = r.name;
+  document.getElementById('resultType').textContent = r.type;
+  document.getElementById('resultDesc').textContent = r.desc;
+  document.getElementById('quizCard').style.display = 'none';
+  document.getElementById('quizResult').style.display = 'block';
+}
+
+function restartQuiz() {
+  quizStep = 0; quizScoreSum = 0;
+  document.getElementById('quizCard').style.display = 'block';
+  document.getElementById('quizResult').style.display = 'none';
+  renderQuiz();
+}
+
+/* 수정: 발표용 더미 공유하기 함수 */
+function shareResult() {
+  showToast('🔗 결과 링크가 클립보드에 복사되었습니다!');
+}
+
+renderQuiz();
+</script>
+</body>
+</html>
