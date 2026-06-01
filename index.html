@@ -179,8 +179,10 @@
     <div class="logo" onclick="resetToHome()">대하우스</div>
     <nav>
       <a id="nav-home" class="active" onclick="switchTab('home')">홈</a>
-      <a id="nav-worldview" onclick="switchTab('worldview')">세계관</a>
       <a id="nav-characters" onclick="switchTab('characters')">캐릭터</a>
+      <a id="nav-worldview" onclick="switchTab('worldview')">세계관</a>
+      <a id="nav-test" onclick="switchTab('test')">유형 테스트</a>
+      <a id="nav-shop" onclick="switchTab('shop')">굿즈샵</a>
     </nav>
   </header>
 
@@ -195,32 +197,7 @@
         </div>
       </div>
 
-      <button class="btn-primary" onclick="startTestMock()" style="padding: 1.2rem 4rem; font-size: 1.2rem; font-weight: 700; letter-spacing: 0.05em; border-radius: 50px; box-shadow: 0 6px 20px rgba(46,36,22,0.15);">테스트 시작하기</button>
-    </div>
-  </section>
-
-  <section id="worldview" class="section">
-    <div style="text-align: center; max-width: 950px; margin: 0 auto; padding: 2rem 1rem 6rem;">
-      <div class="section-header">
-        <div class="section-title">세계관</div>
-        <div class="section-title-deco">
-          <span class="deco-line"></span>
-          <span class="deco-mark">✦</span>
-          <span class="deco-line"></span>
-        </div>
-      </div>
-
-      <h2 style="font-family: 'Nanum Myeongjo', serif; font-size: 1.9rem; font-weight: 800; color: var(--ink); line-height: 1.6; letter-spacing: 0.04em; word-break: keep-all; margin-bottom: 3.5rem; padding: 0 1rem;">
-        "21세기 현대, 사람들의 눈을 피해 깊은 숲속에 살아가는<br>괴담 속 요괴들의 비밀스러운 쉐어하우스!"
-      </h2>
-
-      <div style="width: 100%; max-width: 750px; margin: 0 auto; border-radius: 8px; overflow: hidden; box-shadow: 0 12px 36px rgba(46,36,22,0.15); aspect-ratio: 16/9; background: var(--bg-card);">
-        <img src="images/world_house.png" alt="대하우스 전경" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('world-fallback').style.display='flex';">
-        <div id="world-fallback" class="fallback-box" style="display: none;">
-          <span style="font-family: 'Nanum Myeongjo', serif; font-size: 1.2rem; font-weight: 700;">대하우스 전경 이미지</span>
-          <p style="font-size: 0.85rem; margin-top: 0.5rem;">[ images/world_house.png 파일을 넣어주세요 ]</p>
-        </div>
-      </div>
+      <button class="btn-primary" onclick="switchTab('test')" style="padding: 1.2rem 4rem; font-size: 1.2rem; font-weight: 700; letter-spacing: 0.05em; border-radius: 50px; box-shadow: 0 6px 20px rgba(46,36,22,0.15);">테스트 시작하기</button>
     </div>
   </section>
 
@@ -237,18 +214,14 @@
       </div>
 
       <div style="position: relative; display: flex; align-items: center; justify-content: center; width: 100%; max-width: 950px; margin: 0 auto;">
-        
         <button onclick="prevChar()" style="position: absolute; left: -20px; z-index: 10; border-radius: 50%; width: 50px; height: 50px; border: 1px solid #e1d7c6; background: #faf6ee; color: #5a4b36; cursor: pointer; font-weight: bold; font-size: 1.2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">&lt;</button>
 
         <div style="width: 100%; border-radius: 8px; overflow: hidden; box-shadow: 0 12px 36px rgba(46,36,22,0.15); background: var(--bg-card);">
-          
           <img id="charMainDisplay" src="images/char_01.png" alt="캐릭터 프로필" style="width: 100%; height: auto; display: block;" onerror="handleCharImgError()">
-          
           <div id="charFallbackDisplay" class="fallback-box" style="display: none; padding: 6rem 2rem;">
             <span style="font-family: 'Nanum Myeongjo', serif; font-size: 1.3rem; font-weight: 700; color: var(--ink);" id="charFallbackText">[ images/char_01.png ]</span>
             <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-muted);">해당 경로에 이미지가 없거나 확장자가 다릅니다.</p>
           </div>
-
         </div>
 
         <button onclick="nextChar()" style="position: absolute; right: -20px; z-index: 10; border-radius: 50%; width: 50px; height: 50px; border: 1px solid #e1d7c6; background: #faf6ee; color: #5a4b36; cursor: pointer; font-weight: bold; font-size: 1.2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">&gt;</button>
@@ -262,14 +235,13 @@
         <span class="c-dot" onclick="setChar(4)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.2s;"></span>
         <span class="c-dot" onclick="setChar(5)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.2s;"></span>
       </div>
-
     </div>
   </section>
 
-  <section id="result" class="section">
-    <div style="max-width: 800px; margin: 0 auto; padding: 2rem 1rem 6rem; text-align: center;">
+  <section id="worldview" class="section">
+    <div style="text-align: center; max-width: 1100px; margin: 0 auto; padding: 2rem 1rem 6rem;">
       <div class="section-header">
-        <div class="section-title">테스트 결과</div>
+        <div class="section-title">세계관</div>
         <div class="section-title-deco">
           <span class="deco-line"></span>
           <span class="deco-mark">✦</span>
@@ -277,152 +249,36 @@
         </div>
       </div>
 
-      <div style="width: 100%; max-width: 520px; margin: 0 auto 3.5rem; border-radius: 12px; overflow: hidden; box-shadow: 0 15px 45px rgba(46,36,22,0.18); background: var(--bg-card); aspect-ratio: 4/5;">
-        <img id="resultTypeImage" src="" alt="결과 카드" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('result-fallback').style.display='flex';">
-        <div id="result-fallback" class="fallback-box" style="display: none;">
-          <span style="font-family: 'Nanum Myeongjo', serif; font-size: 1.2rem; font-weight: 700;">결과 리포트 카드 이미지</span>
-          <p id="fallback-img-name" style="font-size: 0.85rem; margin-top: 0.5rem;"></p>
-        </div>
-      </div>
+      <h2 style="font-family: 'Nanum Myeongjo', serif; font-size: 1.9rem; font-weight: 800; color: var(--ink); line-height: 1.6; letter-spacing: 0.04em; word-break: keep-all; margin-bottom: 3.5rem; padding: 0 1rem;">
+        "21세기 현대, 사람들의 눈을 피해 깊은 숲속에 살아가는<br>괴담 속 요괴들의 비밀스러운 쉐어하우스!"
+      </h2>
 
-      <div style="display: flex; justify-content: center; gap: 1.5rem; max-width: 450px; margin: 0 auto;">
-        <button class="btn-secondary" onclick="restartTest()" style="flex: 1; padding: 1.1rem; font-size: 1.05rem; font-weight: 700; border-radius: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.02);">다시하기</button>
-        <button class="btn-primary" onclick="shareResult()" style="flex: 1; padding: 1.1rem; font-size: 1.05rem; font-weight: 700; border-radius: 30px; box-shadow: 0 4px 15px rgba(46,36,22,0.15);">결과 공유</button>
+      <div style="width: 100%; max-width: 950px; margin: 0 auto; border-radius: 8px; overflow: hidden; box-shadow: 0 12px 36px rgba(46,36,22,0.15); aspect-ratio: 16/9; background: var(--bg-card);">
+        <img src="images/world_house.png" alt="대하우스 전경" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('world-fallback').style.display='flex';">
+        <div id="world-fallback" class="fallback-box" style="display: none;">
+          <span style="font-family: 'Nanum Myeongjo', serif; font-size: 1.2rem; font-weight: 700;">대하우스 전경 이미지</span>
+          <p style="font-size: 0.85rem; margin-top: 0.5rem;">[ images/world_house.png 파일을 넣어주세요 ]</p>
+        </div>
       </div>
     </div>
   </section>
 
-
-  <script>
-    // 1. 네비게이션 탭 스위칭 매커니즘
-    function switchTab(tabId) {
-      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-      document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+  <section id="test" class="section">
+    <div style="max-width: 800px; margin: 0 auto; padding: 2rem 1rem 6rem; text-align: center;">
+      <div class="section-header">
+        <div class="section-title">유형 테스트</div>
+        <div class="section-title-deco">
+          <span class="deco-line"></span>
+          <span class="deco-mark">✦</span>
+          <span class="deco-line"></span>
+        </div>
+      </div>
+      <p style="color: var(--text-muted); margin-bottom: 2rem;">나와 닮은 대하우스 요괴 주거 유형을 진단해 봅니다.</p>
       
-      const targetSection = document.getElementById(tabId);
-      const targetNavLink = document.getElementById('nav-' + tabId);
-      
-      if (targetSection) targetSection.classList.add('active');
-      if (targetNavLink) targetNavLink.classList.add('active');
-      
-      window.scrollTo(0, 0);
-    }
+      <button class="btn-primary" onclick="startTestMock()" style="padding: 1rem 3rem; font-weight: 700; border-radius: 30px;">나의 요괴 성향 알아보기</button>
+    </div>
+  </section>
 
-    // 좌측 상단 '대하우스' 로고 리셋 메인 복귀 함수
-    function resetToHome() {
-      switchTab('home');
-    }
-
-    // 2. 캐릭터 탭 전용 슬라이더 기능 제어
-    // 2. 캐릭터 탭 간결한 이미지 체인징 로직 (구 슬라이더 완전 대체)
-    let activeCharIdx = 0;
-    const charImages = [
-      'char_01.png',
-      'char_02.png',
-      'char_03.png',
-      'char_04.png',
-      'char_05.png',
-      'char_06.png'
-    ];
-
-    function refreshCharTab() {
-      const imgEl = document.getElementById('charMainDisplay');
-      const fallbackEl = document.getElementById('charFallbackDisplay');
-      const fallbackTxt = document.getElementById('charFallbackText');
-      const dots = document.querySelectorAll('.c-dot');
-
-      if (!imgEl) return;
-
-      // 1. 디스플레이 초기화 후 주소 매칭
-      imgEl.style.display = 'block';
-      if (fallbackEl) fallbackEl.style.display = 'none';
-      
-      imgEl.src = 'images/' + charImages[activeCharIdx];
-
-      // 2. 하단 도트 불빛 동기화
-      dots.forEach((dot, idx) => {
-        dot.style.opacity = (idx === activeCharIdx) ? '1' : '0.3';
-      });
-    }
-
-    // 이미지 로드 실패 시 예외 처리
-    function handleCharImgError() {
-      const imgEl = document.getElementById('charMainDisplay');
-      const fallbackEl = document.getElementById('charFallbackDisplay');
-      const fallbackTxt = document.getElementById('charFallbackText');
-
-      if (imgEl) imgEl.style.display = 'none';
-      if (fallbackEl) {
-        fallbackEl.style.display = 'flex';
-        fallbackTxt.innerText = `[ images/${charImages[activeCharIdx]} ]`;
-      }
-    }
-
-    function nextChar() {
-      activeCharIdx = (activeCharIdx + 1) % charImages.length;
-      refreshCharTab();
-    }
-
-    function prevChar() {
-      activeCharIdx = (activeCharIdx - 1 + charImages.length) % charImages.length;
-      refreshCharTab();
-    }
-
-    function setChar(idx) {
-      activeCharIdx = idx;
-      refreshCharTab();
-    }
-
-    // 화살표 작동 함수
-    function moveCharSlider(direction) {
-      currentCharIdx += direction;
-      if (currentCharIdx < 0) currentCharIdx = totalCharSlides - 1;
-      else if (currentCharIdx >= totalCharSlides) currentCharIdx = 0;
-      updateCharSlider();
-    }
-
-    // 점(도트) 클릭 함수
-    function goCharSlider(idx) {
-      currentCharIdx = idx;
-      updateCharSlider();
-    }
-
-    // 3. 테스트 연동 및 결과 처리 함수 (.png 버전 반영)
-    function startTestMock() {
-      const types = ['result_01.png', 'result_02.png', 'result_03.png', 'result_04.png', 'result_05.png', 'result_06.png'];
-      const randomType = types[Math.floor(Math.random() * types.length)];
-      showResult(randomType);
-    }
-
-    function showResult(resultImageFileName) {
-      switchTab('result');
-      
-      const resultImgElement = document.getElementById('resultTypeImage');
-      const fallbackNameElement = document.getElementById('fallback-img-name');
-      
-      if (resultImgElement) {
-        resultImgElement.src = 'images/' + resultImageFileName;
-        resultImgElement.style.display = 'block';
-      }
-      
-      if (fallbackNameElement) {
-        fallbackNameElement.innerText = `[ images/${resultImageFileName} 파일을 넣어주세요 ]`;
-        document.getElementById('result-fallback').style.display = 'none'; 
-      }
-    }
-
-    function restartTest() {
-      switchTab('home');
-    }
-
-    function shareResult() {
-      const url = window.location.href;
-      navigator.clipboard.writeText(url).then(() => {
-        alert('대하우스 입주 계약서 주소가 복사되었습니다! 친구들에게 공유해보세요. ✦');
-      }).catch(() => {
-        alert('주소창의 링크를 복사하여 전송해 주세요!');
-      });
-    }
-  </script>
-</body>
-</html>
+  <section id="shop" class="section">
+    <div style="max-width: 1000px; margin: 0 auto; padding: 2rem 1rem 6rem; text-align: center;">
+      <div class="section-header
