@@ -1319,6 +1319,22 @@ function shareResult() {
 }
 
 renderQuiz();
+
+document.querySelectorAll('.nav-link, .menu-btn, nav a').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const targetId = this.getAttribute('onclick')?.match(/'([^']+)'/)?.[1] || this.dataset.tab;
+    if (targetId) localStorage.setItem('currentTab', targetId);
+  });
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  const savedTab = localStorage.getItem('currentTab');
+  if (savedTab) {
+    const activeBtn = document.querySelector(`[onclick*="${savedTab}"], [data-tab="${savedTab}"]`);
+    if (activeBtn) activeBtn.click();
+  }
+});
+
 </script>
 </body>
 </html>
