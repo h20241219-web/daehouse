@@ -238,32 +238,32 @@
       <div style="position: relative; display: flex; align-items: center; justify-content: center; width: 100%;">
         <button onclick="moveCharSlider(-1)" style="position: absolute; left: -15px; z-index: 10; border-radius: 50%; width: 45px; height: 45px; border: 1px solid #e1d7c6; background: #faf6ee; color: #5a4b36; cursor: pointer; font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">&lt;</button>
 
-        <div style="width: 100%; max-width: 900px; overflow: hidden; border-radius: 8px; box-shadow: 0 12px 35px rgba(46,36,22,0.15); background: var(--bg-card); aspect-ratio: 16/9;">
-          <div id="charSliderTrack" style="display: flex; transition: transform 0.4s ease-in-out; width: 600%; height: 100%;">
+        <div style="width: 100%; max-width: 900px; overflow: hidden; border-radius: 8px; box-shadow: 0 12px 35px rgba(46,36,22,0.15); background: var(--bg-card);">
+          <div id="charSliderTrack" style="display: flex; transition: transform 0.4s ease-in-out; width: 600%; height: auto;">
             
-            <div style="width: 16.666%; flex-shrink: 0; height: 100%; position: relative;">
-              <img src="images/char_01.png" alt="캐릭터 1" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-1').style.display='flex';">
-              <div id="c-fb-1" class="fallback-box" style="display: none;"><strong>[ images/char_01.png ]</strong></div>
+            <div style="width: 16.666%; flex-shrink: 0; height: auto; position: relative;">
+              <img src="images/char_01.png" alt="캐릭터 1" style="width: 100%; height: auto; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-1').style.display='flex';">
+              <div id="c-fb-1" class="fallback-box" style="display: none; min-height: 350px;"><strong>[ images/char_01.png ]</strong></div>
             </div>
-            <div style="width: 16.666%; flex-shrink: 0; height: 100%; position: relative;">
-              <img src="images/char_02.png" alt="캐릭터 2" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-2').style.display='flex';">
-              <div id="c-fb-2" class="fallback-box" style="display: none;"><strong>[ images/char_02.png ]</strong></div>
+            <div style="width: 16.666%; flex-shrink: 0; height: auto; position: relative;">
+              <img src="images/char_02.png" alt="캐릭터 2" style="width: 100%; height: auto; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-2').style.display='flex';">
+              <div id="c-fb-2" class="fallback-box" style="display: none; min-height: 350px;"><strong>[ images/char_02.png ]</strong></div>
             </div>
-            <div style="width: 16.666%; flex-shrink: 0; height: 100%; position: relative;">
-              <img src="images/char_03.png" alt="캐릭터 3" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-3').style.display='flex';">
-              <div id="c-fb-3" class="fallback-box" style="display: none;"><strong>[ images/char_03.png ]</strong></div>
+            <div style="width: 16.666%; flex-shrink: 0; height: auto; position: relative;">
+              <img src="images/char_03.png" alt="캐릭터 3" style="width: 100%; height: auto; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-3').style.display='flex';">
+              <div id="c-fb-3" class="fallback-box" style="display: none; min-height: 350px;"><strong>[ images/char_03.png ]</strong></div>
             </div>
-            <div style="width: 16.666%; flex-shrink: 0; height: 100%; position: relative;">
-              <img src="images/char_04.png" alt="캐릭터 4" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-4').style.display='flex';">
-              <div id="c-fb-4" class="fallback-box" style="display: none;"><strong>[ images/char_04.png ]</strong></div>
+            <div style="width: 16.666%; flex-shrink: 0; height: auto; position: relative;">
+              <img src="images/char_04.png" alt="캐릭터 4" style="width: 100%; height: auto; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-4').style.display='flex';">
+              <div id="c-fb-4" class="fallback-box" style="display: none; min-height: 350px;"><strong>[ images/char_04.png ]</strong></div>
             </div>
-            <div style="width: 16.666%; flex-shrink: 0; height: 100%; position: relative;">
-              <img src="images/char_05.png" alt="캐릭터 5" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-5').style.display='flex';">
-              <div id="c-fb-5" class="fallback-box" style="display: none;"><strong>[ images/char_05.png ]</strong></div>
+            <div style="width: 16.666%; flex-shrink: 0; height: auto; position: relative;">
+              <img src="images/char_05.png" alt="캐릭터 5" style="width: 100%; height: auto; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-5').style.display='flex';">
+              <div id="c-fb-5" class="fallback-box" style="display: none; min-height: 350px;"><strong>[ images/char_05.png ]</strong></div>
             </div>
-            <div style="width: 16.666%; flex-shrink: 0; height: 100%; position: relative;">
-              <img src="images/char_06.png" alt="캐릭터 6" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-6').style.display='flex';">
-              <div id="c-fb-6" class="fallback-box" style="display: none;"><strong>[ images/char_06.png ]</strong></div>
+            <div style="width: 16.666%; flex-shrink: 0; height: auto; position: relative;">
+              <img src="images/char_06.png" alt="캐릭터 6" style="width: 100%; height: auto; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-6').style.display='flex';">
+              <div id="c-fb-6" class="fallback-box" style="display: none; min-height: 350px;"><strong>[ images/char_06.png ]</strong></div>
             </div>
 
           </div>
