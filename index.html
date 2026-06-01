@@ -225,7 +225,8 @@
   </section>
 
   <section id="characters" class="section">
-    <div style="max-width: 1100px; margin: 0 auto; padding: 2rem 1rem 6rem;">
+    <div style="max-width: 1000px; margin: 0 auto; padding: 2rem 1rem 6rem; text-align: center;">
+      
       <div class="section-header">
         <div class="section-title">캐릭터</div>
         <div class="section-title-deco">
@@ -235,51 +236,33 @@
         </div>
       </div>
 
-      <div style="position: relative; display: flex; align-items: center; justify-content: center; width: 100%;">
-        <button onclick="moveCharSlider(-1)" style="position: absolute; left: -15px; z-index: 10; border-radius: 50%; width: 45px; height: 45px; border: 1px solid #e1d7c6; background: #faf6ee; color: #5a4b36; cursor: pointer; font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">&lt;</button>
+      <div style="position: relative; display: flex; align-items: center; justify-content: center; width: 100%; max-width: 950px; margin: 0 auto;">
+        
+        <button onclick="prevChar()" style="position: absolute; left: -20px; z-index: 10; border-radius: 50%; width: 50px; height: 50px; border: 1px solid #e1d7c6; background: #faf6ee; color: #5a4b36; cursor: pointer; font-weight: bold; font-size: 1.2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">&lt;</button>
 
-        <div style="width: 100%; max-width: 900px; overflow: hidden; border-radius: 8px; box-shadow: 0 12px 35px rgba(46,36,22,0.15); background: var(--bg-card);">
-          <div id="charSliderTrack" style="display: flex; transition: transform 0.4s ease-in-out; width: 600%; height: auto;">
-            
-            <div style="width: 16.666%; flex-shrink: 0; height: auto; position: relative;">
-              <img src="images/char_01.png" alt="캐릭터 1" style="width: 100%; height: auto; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-1').style.display='flex';">
-              <div id="c-fb-1" class="fallback-box" style="display: none; min-height: 350px;"><strong>[ images/char_01.png ]</strong></div>
-            </div>
-            <div style="width: 16.666%; flex-shrink: 0; height: auto; position: relative;">
-              <img src="images/char_02.png" alt="캐릭터 2" style="width: 100%; height: auto; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-2').style.display='flex';">
-              <div id="c-fb-2" class="fallback-box" style="display: none; min-height: 350px;"><strong>[ images/char_02.png ]</strong></div>
-            </div>
-            <div style="width: 16.666%; flex-shrink: 0; height: auto; position: relative;">
-              <img src="images/char_03.png" alt="캐릭터 3" style="width: 100%; height: auto; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-3').style.display='flex';">
-              <div id="c-fb-3" class="fallback-box" style="display: none; min-height: 350px;"><strong>[ images/char_03.png ]</strong></div>
-            </div>
-            <div style="width: 16.666%; flex-shrink: 0; height: auto; position: relative;">
-              <img src="images/char_04.png" alt="캐릭터 4" style="width: 100%; height: auto; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-4').style.display='flex';">
-              <div id="c-fb-4" class="fallback-box" style="display: none; min-height: 350px;"><strong>[ images/char_04.png ]</strong></div>
-            </div>
-            <div style="width: 16.666%; flex-shrink: 0; height: auto; position: relative;">
-              <img src="images/char_05.png" alt="캐릭터 5" style="width: 100%; height: auto; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-5').style.display='flex';">
-              <div id="c-fb-5" class="fallback-box" style="display: none; min-height: 350px;"><strong>[ images/char_05.png ]</strong></div>
-            </div>
-            <div style="width: 16.666%; flex-shrink: 0; height: auto; position: relative;">
-              <img src="images/char_06.png" alt="캐릭터 6" style="width: 100%; height: auto; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-6').style.display='flex';">
-              <div id="c-fb-6" class="fallback-box" style="display: none; min-height: 350px;"><strong>[ images/char_06.png ]</strong></div>
-            </div>
-
+        <div style="width: 100%; border-radius: 8px; overflow: hidden; box-shadow: 0 12px 36px rgba(46,36,22,0.15); background: var(--bg-card);">
+          
+          <img id="charMainDisplay" src="images/char_01.png" alt="캐릭터 프로필" style="width: 100%; height: auto; display: block;" onerror="handleCharImgError()">
+          
+          <div id="charFallbackDisplay" class="fallback-box" style="display: none; padding: 6rem 2rem;">
+            <span style="font-family: 'Nanum Myeongjo', serif; font-size: 1.3rem; font-weight: 700; color: var(--ink);" id="charFallbackText">[ images/char_01.png ]</span>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-muted);">해당 경로에 이미지가 없거나 확장자가 다릅니다.</p>
           </div>
+
         </div>
 
-        <button onclick="moveCharSlider(1)" style="position: absolute; right: -15px; z-index: 10; border-radius: 50%; width: 45px; height: 45px; border: 1px solid #e1d7c6; background: #faf6ee; color: #5a4b36; cursor: pointer; font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">&gt;</button>
+        <button onclick="nextChar()" style="position: absolute; right: -20px; z-index: 10; border-radius: 50%; width: 50px; height: 50px; border: 1px solid #e1d7c6; background: #faf6ee; color: #5a4b36; cursor: pointer; font-weight: bold; font-size: 1.2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">&gt;</button>
       </div>
 
-      <div style="display: flex; justify-content: center; gap: 10px; margin-top: 2rem;">
-        <span class="char-dot" onclick="goCharSlider(0)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 1; transition: opacity 0.3s;"></span>
-        <span class="char-dot" onclick="goCharSlider(1)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></span>
-        <span class="char-dot" onclick="goCharSlider(2)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></span>
-        <span class="char-dot" onclick="goCharSlider(3)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></span>
-        <span class="char-dot" onclick="goCharSlider(4)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></span>
-        <span class="char-dot" onclick="goCharSlider(5)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></span>
+      <div style="display: flex; justify-content: center; gap: 12px; margin-top: 2.5rem;">
+        <span class="c-dot" onclick="setChar(0)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 1; transition: opacity 0.2s;"></span>
+        <span class="c-dot" onclick="setChar(1)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.2s;"></span>
+        <span class="c-dot" onclick="setChar(2)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.2s;"></span>
+        <span class="c-dot" onclick="setChar(3)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.2s;"></span>
+        <span class="c-dot" onclick="setChar(4)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.2s;"></span>
+        <span class="c-dot" onclick="setChar(5)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.2s;"></span>
       </div>
+
     </div>
   </section>
 
@@ -331,20 +314,63 @@
     }
 
     // 2. 캐릭터 탭 전용 슬라이더 기능 제어
-    let currentCharIdx = 0;
-    const totalCharSlides = 6;
+    // 2. 캐릭터 탭 간결한 이미지 체인징 로직 (구 슬라이더 완전 대체)
+    let activeCharIdx = 0;
+    const charImages = [
+      'char_01.png',
+      'char_02.png',
+      'char_03.png',
+      'char_04.png',
+      'char_05.png',
+      'char_06.png'
+    ];
 
-    function updateCharSlider() {
-      const track = document.getElementById('charSliderTrack');
-      const dots = document.querySelectorAll('.char-dot');
-      if (!track) return;
+    function refreshCharTab() {
+      const imgEl = document.getElementById('charMainDisplay');
+      const fallbackEl = document.getElementById('charFallbackDisplay');
+      const fallbackTxt = document.getElementById('charFallbackText');
+      const dots = document.querySelectorAll('.c-dot');
 
-      const movePercentage = currentCharIdx * (100 / totalCharSlides);
-      track.style.transform = `translateX(-${movePercentage}%)`;
+      if (!imgEl) return;
 
+      // 1. 디스플레이 초기화 후 주소 매칭
+      imgEl.style.display = 'block';
+      if (fallbackEl) fallbackEl.style.display = 'none';
+      
+      imgEl.src = 'images/' + charImages[activeCharIdx];
+
+      // 2. 하단 도트 불빛 동기화
       dots.forEach((dot, idx) => {
-        dot.style.opacity = (idx === currentCharIdx) ? '1' : '0.3';
+        dot.style.opacity = (idx === activeCharIdx) ? '1' : '0.3';
       });
+    }
+
+    // 이미지 로드 실패 시 예외 처리
+    function handleCharImgError() {
+      const imgEl = document.getElementById('charMainDisplay');
+      const fallbackEl = document.getElementById('charFallbackDisplay');
+      const fallbackTxt = document.getElementById('charFallbackText');
+
+      if (imgEl) imgEl.style.display = 'none';
+      if (fallbackEl) {
+        fallbackEl.style.display = 'flex';
+        fallbackTxt.innerText = `[ images/${charImages[activeCharIdx]} ]`;
+      }
+    }
+
+    function nextChar() {
+      activeCharIdx = (activeCharIdx + 1) % charImages.length;
+      refreshCharTab();
+    }
+
+    function prevChar() {
+      activeCharIdx = (activeCharIdx - 1 + charImages.length) % charImages.length;
+      refreshCharTab();
+    }
+
+    function setChar(idx) {
+      activeCharIdx = idx;
+      refreshCharTab();
     }
 
     // 화살표 작동 함수
