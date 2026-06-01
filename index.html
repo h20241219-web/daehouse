@@ -716,27 +716,63 @@
 </section>
 
 <section id="characters" class="section">
-  <div class="section-header">
-    <div class="section-title">캐릭터</div>
-    <div class="section-title-deco">
-      <span class="deco-line"></span>
-      <span class="deco-mark">✦</span>
-      <span class="deco-line"></span>
+  <div class="character-container" style="max-width: 1000px; margin: 0 auto; padding: 4rem 1rem 6rem;">
+    
+    <div class="section-header" style="padding-bottom: 3rem; text-align: center;">
+      <div class="section-title">캐릭터</div>
+      <div class="section-title-deco">
+        <span class="deco-line"></span>
+        <span class="deco-mark">✦</span>
+        <span class="deco-line"></span>
+      </div>
     </div>
-  </div>
 
-  <div class="char-carousel-wrap">
-    <button class="carousel-arrow left" onclick="scrollCarousel(-1)" aria-label="이전">
-      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-    </button>
+    <div class="slider-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center;">
+      
+      <button class="slider-btn prev-btn" onclick="moveCharSlider(-1)" style="position: absolute; left: -20px; z-index: 10; border-radius: 50%; width: 45px; height: 45px; border: 1px solid #e1d7c6; background: #faf6ee; color: #5a4b36; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); font-weight: bold;">&lt;</button>
 
-    <div class="char-carousel" id="charCarousel"></div>
+      <div class="char-slider-display" style="width: 100%; max-width: 850px; overflow: hidden; border-radius: 8px; box-shadow: 0 10px 30px rgba(46,36,22,0.12); background: #fff;">
+        <div id="charSliderTrack" style="display: flex; transition: transform 0.4s ease-in-out; width: 600%;">
+          
+          <div class="char-slide-item" style="width: 16.666%; flex-shrink: 0; display: block; line-height: 0;">
+            <img src="images/char_01.jpg" alt="매령" style="width: 100%; height: auto; display: block;">
+          </div>
 
-    <button class="carousel-arrow right" onclick="scrollCarousel(1)" aria-label="다음">
-      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-    </button>
+          <div class="char-slide-item" style="width: 16.666%; flex-shrink: 0; display: block; line-height: 0;">
+            <img src="images/char_02.jpg" alt="캐릭터2" style="width: 100%; height: auto; display: block;">
+          </div>
 
-    <div class="carousel-nav" id="carouselDots"></div>
+          <div class="char-slide-item" style="width: 16.666%; flex-shrink: 0; display: block; line-height: 0;">
+            <img src="images/char_03.jpg" alt="캐릭터3" style="width: 100%; height: auto; display: block;">
+          </div>
+
+          <div class="char-slide-item" style="width: 16.666%; flex-shrink: 0; display: block; line-height: 0;">
+            <img src="images/char_04.jpg" alt="캐릭터4" style="width: 100%; height: auto; display: block;">
+          </div>
+
+          <div class="char-slide-item" style="width: 16.666%; flex-shrink: 0; display: block; line-height: 0;">
+            <img src="images/char_05.jpg" alt="캐릭터5" style="width: 100%; height: auto; display: block;">
+          </div>
+
+          <div class="char-slide-item" style="width: 16.666%; flex-shrink: 0; display: block; line-height: 0;">
+            <img src="images/char_06.jpg" alt="캐릭터6" style="width: 100%; height: auto; display: block;">
+          </div>
+
+        </div>
+      </div>
+
+      <button class="slider-btn next-btn" onclick="moveCharSlider(1)" style="position: absolute; right: -20px; z-index: 10; border-radius: 50%; width: 45px; height: 45px; border: 1px solid #e1d7c6; background: #faf6ee; color: #5a4b36; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); font-weight: bold;">&gt;</button>
+    </div>
+
+    <div class="char-dots" style="display: flex; justify-content: center; gap: 10px; margin-top: 2rem;">
+      <span class="char-dot active" onclick="goCharSlider(0)" style="width: 10px; height: 10px; border-radius: 50%; background: #5a4b36; cursor: pointer; opacity: 1; transition: opacity 0.3s;"></span>
+      <span class="char-dot" onclick="goCharSlider(1)" style="width: 10px; height: 10px; border-radius: 50%; background: #5a4b36; cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></span>
+      <span class="char-dot" onclick="goCharSlider(2)" style="width: 10px; height: 10px; border-radius: 50%; background: #5a4b36; cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></span>
+      <span class="char-dot" onclick="goCharSlider(3)" style="width: 10px; height: 10px; border-radius: 50%; background: #5a4b36; cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></span>
+      <span class="char-dot" onclick="goCharSlider(4)" style="width: 10px; height: 10px; border-radius: 50%; background: #5a4b36; cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></span>
+      <span class="char-dot" onclick="goCharSlider(5)" style="width: 10px; height: 10px; border-radius: 50%; background: #5a4b36; cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></span>
+    </div>
+
   </div>
 </section>
 
@@ -1184,6 +1220,46 @@ window.addEventListener('DOMContentLoaded', () => {
   renderCharacters();
   renderGoods();
 });
+
+// 캐릭터 이미지 슬라이더 제어 스크립트
+let currentCharIdx = 0;
+const totalCharSlides = 6;
+
+function updateCharSlider() {
+  const track = document.getElementById('charSliderTrack');
+  const dots = document.querySelectorAll('.char-dot');
+  
+  if (!track) return;
+  
+  // 6개 슬라이드가 있으므로 한 칸 이동할 때마다 -16.666%씩 이동
+  const movePercentage = currentCharIdx * (100 / totalCharSlides);
+  track.style.transform = `translateX(-${movePercentage}%)`;
+  
+  // 하단 점(도트) 활성화 상태 불빛 켜고 끄기
+  dots.forEach((dot, idx) => {
+    if (idx === currentCharIdx) {
+      dot.style.opacity = '1';
+    } else {
+      dot.style.opacity = '0.3';
+    }
+  });
+}
+
+function moveCharSlider(direction) {
+  currentCharIdx += direction;
+  if (currentCharIdx < 0) {
+    currentCharIdx = totalCharSlides - 1; // 처음에서 왼쪽 가려하면 마지막으로
+  } else if (currentCharIdx >= totalCharSlides) {
+    currentCharIdx = 0; // 마지막에서 오른쪽 가려하면 처음으로
+  }
+  updateCharSlider();
+}
+
+function goCharSlider(idx) {
+  currentCharIdx = idx;
+  updateCharSlider();
+}
+
 </script>
 </body>
 </html>
