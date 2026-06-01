@@ -1,1283 +1,402 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>대하우스: 요괴들의 비밀스러운 동거</title>
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg-main: #F5EFE6;
-    --bg-card: #EDE4D5;
-    --bg-accent: #E2D5C0;
-    --bg-deep: #CFC0A5;
-    --text-primary: #2E2416;
-    --text-secondary: #5C4A30;
-    --text-muted: #8C7A60;
-    --border: #D4C4A8;
-    --border-light: #E8DCC8;
-    --ink: #1A1208;
-    --gold: #A07840;
-    --gold-light: #C4A060;
-    --red-accent: #8B2020;
-    --white-soft: #FAF6EF;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--bg-main);
-    color: var(--text-primary);
-    font-family: 'Noto Serif KR', serif;
-    min-height: 100vh;
-  }
-
-  /* ─── NAV ─── */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    background: rgba(245,239,230,0.94);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 2.5rem;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .nav-logo {
-    font-family: 'Nanum Myeongjo', serif;
-    font-size: 1.15rem;
-    font-weight: 800;
-    color: var(--ink);
-    letter-spacing: 0.05em;
-    text-decoration: none;
-  }
-
-  .nav-tabs {
-    display: flex;
-    gap: 0;
-    list-style: none;
-    align-items: center;
-    margin: 0 auto; /* 상단 메뉴 정중앙 정렬 */
-  }
-
-  .nav-tabs li a {
-    display: block;
-    padding: 0 1.25rem;
-    height: 64px;
-    line-height: 64px;
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    text-decoration: none;
-    letter-spacing: 0.04em;
-    border-bottom: 2px solid transparent;
-    transition: color 0.2s, border-color 0.2s;
-    white-space: nowrap;
-  }
-
-  .nav-tabs li a:hover,
-  .nav-tabs li a.active {
-    color: var(--ink);
-    border-bottom-color: var(--gold);
-  }
-
-  .cart-btn {
-    position: relative;
-    background: none;
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    width: 40px; height: 40px;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.2s;
-    flex-shrink: 0;
-  }
-
-  .cart-btn:hover { background: var(--bg-card); }
-  .cart-btn svg { width: 18px; height: 18px; stroke: var(--text-secondary); fill: none; stroke-width: 1.5; }
-
-  .cart-badge {
-    position: absolute;
-    top: -4px; right: -4px;
-    background: var(--red-accent);
-    color: #fff;
-    font-size: 10px;
-    width: 16px; height: 16px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-family: sans-serif;
-    display: none;
-  }
-
-  /* ─── SECTIONS (중앙 정렬 보정) ─── */
-  .section { display: none; padding-top: 64px; min-height: 100vh; width: 100%; }
-  .section.active { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
-
-  /* ─── HOME ─── */
-  #home .home-hero {
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 4rem 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .home-main-img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 4px;
-    box-shadow: 0 10px 30px rgba(46,36,22,0.15);
-  }
-
-  .home-main-placeholder {
-    width: 100%;
-    aspect-ratio: 16/9;
-    background: var(--bg-accent);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    border-radius: 4px;
-    border: 1px dashed var(--border);
-    padding: 2rem;
-  }
-
-  /* ─── SECTIONS HEADER ─── */
-  .section-header {
-    text-align: center;
-    padding: 3.5rem 2rem 2rem;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .section-title {
-    font-family: 'Nanum Myeongjo', serif;
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: var(--ink);
-    letter-spacing: 0.05em;
-  }
-
-  .section-title-deco {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 0.75rem;
-    width: 100%;
-  }
-
-  .deco-line {
-    width: 80px;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .deco-mark {
-    font-size: 1rem;
-    color: var(--gold);
-  }
-
-  /* ─── CHARACTERS (중앙 레이아웃 완벽 정렬) ─── */
-  .char-carousel-wrap {
-    width: 100%;
-    max-width: 500px; /* 싱글 카드 형태로 보기 좋게 고정 */
-    padding: 1rem 2rem 4rem;
-    position: relative;
-    margin: 0 auto;
-  }
-
-  .char-carousel {
-    display: flex;
-    gap: 1.5rem;
-    overflow-x: hidden; /* 화살표 및 도트로 부드럽게 제어 */
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    padding: 1rem 0.5rem 1.5rem;
-    width: 100%;
-  }
-
-  .char-carousel::-webkit-scrollbar { display: none; }
-
-  .char-card {
-    scroll-snap-align: center;
-    flex: 0 0 100%;
-    background: var(--white-soft);
-    border: 1px solid var(--border-light);
-    border-radius: 2px;
-    overflow: hidden;
-    transition: transform 0.3s, box-shadow 0.3s;
-    position: relative;
-  }
-
-  .char-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 40px rgba(46,36,22,0.12);
-  }
-
-  .char-card-img {
-    width: 100%;
-    aspect-ratio: 4/3;
-    object-fit: cover;
-    display: block;
-    background: var(--bg-accent);
-  }
-
-  .char-card-img-placeholder {
-    width: 100%;
-    aspect-ratio: 4/3;
-    background: var(--bg-accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .char-card-img-placeholder span {
-    font-size: 0.7rem;
-    color: var(--text-muted);
-    letter-spacing: 0.1em;
-  }
-
-  .char-card-body {
-    padding: 1.25rem 1.25rem 1.5rem;
-    border-top: 1px solid var(--border-light);
-    text-align: center; /* 텍스트 중앙 정렬 */
-  }
-
-  .char-name {
-    font-family: 'Nanum Myeongjo', serif;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--ink);
-    letter-spacing: 0.05em;
-  }
-
-  .char-type {
-    font-size: 0.75rem;
-    color: var(--gold);
-    letter-spacing: 0.15em;
-    margin-top: 0.35rem;
-  }
-
-  .char-desc {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    line-height: 1.75;
-    margin-top: 0.85rem;
-  }
-
-  .carousel-nav {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 1rem;
-  }
-
-  .carousel-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--border);
-    cursor: pointer;
-    transition: background 0.2s, transform 0.2s;
-    border: none;
-    padding: 0;
-  }
-
-  .carousel-dot.active {
-    background: var(--gold);
-    transform: scale(1.3);
-  }
-
-  .carousel-arrow {
-    position: absolute;
-    top: 40%;
-    transform: translateY(-50%);
-    background: var(--white-soft);
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    width: 40px; height: 40px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-    transition: background 0.2s;
-    color: var(--text-secondary);
-  }
-
-  .carousel-arrow:hover { background: var(--bg-accent); }
-  .carousel-arrow.left { left: -50px; }
-  .carousel-arrow.right { right: -50px; }
-  .carousel-arrow svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
-
-  /* ─── WORLDVIEW ─── */
-  .world-content {
-    max-width: 800px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 2rem 5rem;
-  }
-
-  .world-block {
-    background: var(--white-soft);
-    border: 1px solid var(--border-light);
-    border-left: 3px solid var(--gold);
-    padding: 1.75rem 2rem;
-    margin-bottom: 1.5rem;
-    border-radius: 1px;
-    text-align: left;
-  }
-
-  .world-block-title {
-    font-family: 'Nanum Myeongjo', serif;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--ink);
-    letter-spacing: 0.06em;
-    margin-bottom: 0.75rem;
-  }
-
-  .world-block p {
-    font-size: 0.9rem;
-    line-height: 2;
-    color: var(--text-secondary);
-  }
-
-  /* ─── QUIZ ─── */
-  .quiz-wrap {
-    max-width: 600px;
-    width: 100%;
-    padding: 0 2rem 5rem;
-    margin: 0 auto;
-  }
-
-  .quiz-card {
-    background: var(--white-soft);
-    border: 1px solid var(--border-light);
-    border-radius: 2px;
-    padding: 2.5rem 2rem;
-    text-align: center;
-  }
-
-  .quiz-progress {
-    font-size: 0.75rem;
-    color: var(--gold);
-    letter-spacing: 0.2em;
-    margin-bottom: 1rem;
-  }
-
-  .quiz-q {
-    font-family: 'Nanum Myeongjo', serif;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--ink);
-    line-height: 1.7;
-    margin-bottom: 2rem;
-  }
-
-  .quiz-options {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .quiz-opt {
-    background: var(--bg-main);
-    border: 1px solid var(--border);
-    padding: 0.9rem 1.25rem;
-    font-size: 0.875rem;
-    color: var(--text-primary);
-    cursor: pointer;
-    border-radius: 1px;
-    transition: background 0.2s, border-color 0.2s, color 0.2s;
-    font-family: 'Noto Serif KR', serif;
-    text-align: left;
-    line-height: 1.6;
-    width: 100%;
-  }
-
-  .quiz-opt:hover {
-    background: var(--bg-accent);
-    border-color: var(--gold-light);
-    color: var(--ink);
-  }
-
-  .quiz-result {
-    display: none;
-    background: var(--white-soft);
-    border: 1px solid var(--border-light);
-    border-radius: 2px;
-    padding: 3rem 2rem;
-    text-align: center;
-  }
-
-  .quiz-result-img {
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin: 0 auto 1.5rem;
-    display: block;
-    background: var(--bg-accent);
-    border: 2px solid var(--border);
-  }
-
-  .quiz-result-name {
-    font-family: 'Nanum Myeongjo', serif;
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--ink);
-    margin-bottom: 0.5rem;
-  }
-
-  .quiz-result-type {
-    font-size: 0.8rem;
-    letter-spacing: 0.2em;
-    color: var(--gold);
-    margin-bottom: 1.5rem;
-  }
-
-  .quiz-result-desc {
-    font-size: 0.9rem;
-    line-height: 2;
-    color: var(--text-secondary);
-    margin-bottom: 2rem;
-  }
-
-  .quiz-btn-group {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-  }
-
-  .quiz-restart, .quiz-share {
-    background: none;
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    padding: 0.75rem 1.5rem;
-    font-size: 0.85rem;
-    cursor: pointer;
-    font-family: 'Noto Serif KR', serif;
-    letter-spacing: 0.1em;
-    transition: background 0.2s, color 0.2s;
-    border-radius: 1px;
-    flex: 1;
-    max-width: 160px;
-  }
-
-  .quiz-restart:hover {
-    background: var(--gold);
-    color: var(--white-soft);
-  }
-
-  .quiz-share {
-    background: var(--gold);
-    color: var(--white-soft);
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>대하우스 - 요괴들의 비밀스러운 동거</title>
   
-  .quiz-share:hover {
-    background: var(--gold-light);
-    border-color: var(--gold-light);
-  }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 
-  /* ─── GOODS (3x2 그리드 배열 변경 및 중앙 정렬) ─── */
-  .goods-wrap {
-    max-width: 960px;
-    width: 100%;
-    padding: 0 2rem 5rem;
-    margin: 0 auto;
-  }
+  <style>
+    /* 기본 테마 및 초기화 */
+    :root {
+      --bg-main: #faf6ee;       /* 전통적이고 부드러운 베이지 배경 */
+      --bg-card: #eae4d8;       /* 컨테이너 및 플레이스홀더 배경 */
+      --ink: #2e2416;           /* 깊은 먹색 텍스트 */
+      --gold: #c3a478;          /* 포인트 골드 단청색 */
+      --text-muted: #8a7962;
+    }
 
-  .goods-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 무조건 3열로 고정하여 3x2 만족 */
-    gap: 2rem;
-  }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  .goods-card {
-    background: var(--white-soft);
-    border: 1px solid var(--border-light);
-    border-radius: 1px;
-    overflow: hidden;
-    transition: transform 0.25s, box-shadow 0.25s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--ink);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
 
-  .goods-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 28px rgba(46,36,22,0.1);
-  }
+    /* 상단 네비게이션 바 */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 70px;
+      background: rgba(250, 246, 238, 0.95);
+      border-bottom: 1px solid #e1d7c6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(46,36,22,0.02);
+    }
 
-  .goods-img {
-    width: 100%;
-    aspect-ratio: 1/1;
-    object-fit: cover;
-    display: block;
-    background: var(--bg-accent);
-  }
+    .logo {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--ink);
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+    .logo:hover {
+      color: var(--gold);
+    }
 
-  .goods-img-placeholder {
-    width: 100%;
-    aspect-ratio: 1/1;
-    background: var(--bg-accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
+    nav {
+      display: flex;
+      gap: 2rem;
+    }
 
-  .goods-img-placeholder span {
-    font-size: 0.65rem;
-    color: var(--text-muted);
-    letter-spacing: 0.08em;
-  }
+    nav a {
+      text-decoration: none;
+      color: var(--ink);
+      font-weight: 500;
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 0.5rem 0;
+      position: relative;
+      transition: color 0.2s;
+    }
 
-  .goods-info {
-    padding: 1.25rem 1rem 0.5rem;
-    width: 100%;
-  }
+    nav a.active, nav a:hover {
+      color: var(--gold);
+      font-weight: 700;
+    }
 
-  .goods-name {
-    font-family: 'Nanum Myeongjo', serif;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--ink);
-    letter-spacing: 0.03em;
-  }
+    /* 섹션 기본 스타일 관리 */
+    .section {
+      display: none;
+      padding-top: 100px; /* 헤더에 가려지지 않게 여백 고정 */
+      min-height: 100vh;
+      width: 100%;
+    }
 
-  .goods-price {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    margin-top: 0.35rem;
-    letter-spacing: 0.04em;
-  }
+    .section.active {
+      display: block;
+    }
 
-  .goods-add-btn {
-    display: block;
-    width: calc(100% - 2rem);
-    margin: 0.5rem 1rem 1.25rem;
-    background: var(--bg-main);
-    border: 1px solid var(--border);
-    padding: 0.6rem;
-    font-size: 0.8rem;
-    cursor: pointer;
-    font-family: 'Noto Serif KR', serif;
-    color: var(--text-primary);
-    letter-spacing: 0.08em;
-    transition: background 0.2s, border-color 0.2s, color 0.2s;
-    border-radius: 1px;
-  }
+    /* 공통 타이틀 장식 디자인 */
+    .section-header {
+      text-align: center;
+      padding-bottom: 3rem;
+    }
 
-  .goods-add-btn:hover {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: var(--white-soft);
-  }
+    .section-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
 
-  /* ─── CART DRAWER ─── */
-  .cart-overlay {
-    position: fixed; inset: 0;
-    background: rgba(46,36,22,0.4);
-    z-index: 200;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s;
-  }
+    .section-title-deco {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
 
-  .cart-overlay.open { opacity: 1; pointer-events: all; }
+    .deco-line {
+      display: inline-block;
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+    }
 
-  .cart-drawer {
-    position: fixed;
-    top: 0; right: 0; bottom: 0;
-    width: 380px;
-    max-width: 100vw;
-    background: var(--white-soft);
-    border-left: 1px solid var(--border);
-    z-index: 300;
-    transform: translateX(100%);
-    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
-    display: flex; flex-direction: column;
-  }
+    .deco-mark {
+      color: var(--gold);
+      font-size: 0.8rem;
+    }
 
-  .cart-drawer.open { transform: translateX(0); }
-  .cart-drawer-head { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; }
-  .cart-drawer-title { font-family: 'Nanum Myeongjo', serif; font-size: 1rem; font-weight: 700; color: var(--ink); letter-spacing: 0.06em; }
-  .cart-close { background: none; border: none; cursor: pointer; font-size: 1.2rem; color: var(--text-muted); line-height: 1; }
-  .cart-body { flex: 1; overflow-y: auto; padding: 1rem 1.5rem; }
-  .cart-empty { text-align: center; padding: 3rem 0; font-size: 0.875rem; color: var(--text-muted); letter-spacing: 0.06em; }
-  
-  .cart-item { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--border-light); align-items: center; }
-  .cart-item-img { width: 56px; height: 56px; object-fit: cover; background: var(--bg-accent); flex-shrink: 0; border-radius: 1px; }
-  .cart-item-name { font-size: 0.875rem; color: var(--ink); font-weight: 600; letter-spacing: 0.03em; }
-  .cart-item-price { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; }
-  .cart-item-qty { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.4rem; }
-  
-  .qty-btn { width: 22px; height: 22px; border: 1px solid var(--border); background: none; cursor: pointer; font-size: 0.85rem; color: var(--text-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 1; transition: background 0.2s; }
-  .qty-btn:hover { background: var(--bg-accent); }
-  .qty-num { font-size: 0.875rem; color: var(--ink); min-width: 16px; text-align: center; font-family: sans-serif; }
-  .cart-item-del { margin-left: auto; background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 1rem; flex-shrink: 0; transition: color 0.2s; }
-  .cart-item-del:hover { color: var(--red-accent); }
+    /* 공통 버튼 디자인 */
+    .btn-primary, .btn-secondary {
+      font-family: 'Noto Sans KR', sans-serif;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-  .cart-footer { padding: 1.25rem 1.5rem; border-top: 1px solid var(--border-light); }
-  .cart-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-  .cart-total-label { font-size: 0.85rem; color: var(--text-muted); letter-spacing: 0.1em; }
-  .cart-total-price { font-family: 'Nanum Myeongjo', serif; font-size: 1.1rem; font-weight: 700; color: var(--ink); }
-  .cart-checkout { width: 100%; background: var(--ink); color: var(--white-soft); border: none; padding: 0.9rem; font-size: 0.875rem; cursor: pointer; font-family: 'Noto Serif KR', serif; letter-spacing: 0.12em; transition: background 0.2s; border-radius: 1px; }
-  .cart-checkout:hover { background: var(--text-secondary); }
+    .btn-primary {
+      background: var(--ink);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: #453622;
+      transform: translateY(-2px);
+    }
 
-  /* ─── TOAST ─── */
-  .toast {
-    position: fixed;
-    bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(12px);
-    background: var(--ink);
-    color: var(--white-soft);
-    padding: 0.7rem 1.5rem;
-    font-size: 0.825rem;
-    letter-spacing: 0.08em;
-    border-radius: 2px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s, transform 0.3s;
-    white-space: nowrap;
-    z-index: 500;
-  }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .btn-secondary {
+      background: #fff;
+      color: var(--ink);
+      border: 1px solid #e1d7c6;
+    }
+    .btn-secondary:hover {
+      background: #faf6ee;
+      transform: translateY(-2px);
+    }
 
-  /* ─── FOOTER ─── */
-  footer {
-    text-align: center;
-    padding: 2rem;
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    letter-spacing: 0.1em;
-    border-top: 1px solid var(--border-light);
-    width: 100%;
-  }
-
-  @media (max-width: 768px) {
-    .goods-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; } /* 모바일 가독성을 위해 2열 자동 조절 */
-    .char-carousel-wrap { max-width: 100%; }
-    .carousel-arrow { display: none; }
-  }
-
-  @media (max-width: 640px) {
-    nav { padding: 0 1rem; }
-    .nav-logo { font-size: 0.9rem; }
-    .nav-tabs li a { padding: 0 0.6rem; font-size: 0.75rem; }
-    .cart-drawer { width: 100%; }
-  }
-</style>
+    /* 미디어 파일 에러 시 임시 가이드 박스 */
+    .fallback-box {
+      width: 100%;
+      height: 100%;
+      background: var(--bg-card);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      border-radius: 6px;
+    }
+  </style>
 </head>
 <body>
 
-<nav>
-  <a class="nav-logo" href="#" onclick="showSection('home')">대하우스</a>
-  <ul class="nav-tabs">
-    <li><a href="#" class="active" onclick="showSection('home')">홈</a></li>
-    <li><a href="#" onclick="showSection('characters')">캐릭터</a></li>
-    <li><a href="#" onclick="showSection('worldview')">세계관</a></li>
-    <li><a href="#" onclick="showSection('quiz')">유형 테스트</a></li>
-    <li><a href="#" onclick="showSection('goods')">굿즈샵</a></li>
-  </ul>
-  <button class="cart-btn" onclick="toggleCart()" aria-label="장바구니">
-    <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-    <span class="cart-badge" id="cartBadge">0</span>
-  </button>
-</nav>
+  <header>
+    <div class="logo" onclick="resetToHome()">대하우스</div>
+    <nav>
+      <a id="nav-home" class="active" onclick="switchTab('home')">홈</a>
+      <a id="nav-worldview" onclick="switchTab('worldview')">세계관</a>
+      <a id="nav-characters" onclick="switchTab('characters')">캐릭터</a>
+    </nav>
+  </header>
 
-<section id="home" class="section active">
-  <div class="home-hero">
-    <img src="images/home_main.png" alt="대하우스 메인" class="home-main-img"
-      onerror="this.style.display='none';document.getElementById('home-main-fallback').style.display='flex'">
-    
-    <div id="home-main-fallback" class="home-main-placeholder" style="display:none;">
-      <h1 style="font-family:'Nanum Myeongjo',serif;font-size:2.2rem;font-weight:800;color:var(--ink);letter-spacing:0.06em;line-height:1.5; text-align: center;">
-        대하우스<br>
-        <span style="font-size:1.1rem;font-weight:400;color:var(--text-secondary);letter-spacing:0.12em">요괴들의 비밀스러운 동거</span>
-      </h1>
-      <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 1rem;">[여기에 images/home_main.png 파일을 넣어주세요]</p>
-    </div>
-  </div>
-</section>
-
-<section id="characters" class="section">
-  <div class="character-container" style="max-width: 1000px; margin: 0 auto; padding: 4rem 1rem 6rem;">
-    
-    <div class="section-header" style="padding-bottom: 3rem; text-align: center;">
-      <div class="section-title">캐릭터</div>
-      <div class="section-title-deco">
-        <span class="deco-line"></span>
-        <span class="deco-mark">✦</span>
-        <span class="deco-line"></span>
-      </div>
-    </div>
-
-    <div class="slider-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; width: 100%;">
+  <section id="home" class="section active">
+    <div style="max-width: 1100px; margin: 0 auto; padding: 2rem 1rem 6rem; text-align: center;">
       
-      <button class="slider-btn prev-btn" onclick="moveCharSlider(-1)" style="position: absolute; left: -20px; z-index: 10; border-radius: 50%; width: 45px; height: 45px; border: 1px solid #e1d7c6; background: #faf6ee; color: #5a4b36; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); font-weight: bold;">&lt;</button>
-
-      <div class="char-slider-display" style="width: 100%; max-width: 850px; overflow: hidden; border-radius: 8px; box-shadow: 0 10px 30px rgba(46,36,22,0.12); background: #eae4d8; aspect-ratio: 16/9; min-height: 300px;">
-        <div id="charSliderTrack" style="display: flex; transition: transform 0.4s ease-in-out; width: 600%; height: 100%;">
-          
-          <div class="char-slide-item" style="width: 16.666%; flex-shrink: 0; height: 100%; position: relative; background: #eae4d8;">
-            <img src="images/char_01.jpg" alt="매령" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('char-fallback-1').style.display='flex';">
-            <div id="char-fallback-1" style="display: none; position: absolute; top:0; left:0; width:100%; height:100%; align-items:center; justify-content:center; flex-direction:column; color:#8a7962;">
-              <strong>[ images/char_01.jpg ]</strong><span style="font-size:0.85rem; margin-top:0.5rem;">파일을 폴더에 넣어주세요</span>
-            </div>
-          </div>
-
-          <div class="char-slide-item" style="width: 16.666%; flex-shrink: 0; height: 100%; position: relative; background: #eae4d8;">
-            <img src="images/char_02.jpg" alt="캐릭터2" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('char-fallback-2').style.display='flex';">
-            <div id="char-fallback-2" style="display: none; position: absolute; top:0; left:0; width:100%; height:100%; align-items:center; justify-content:center; flex-direction:column; color:#8a7962;">
-              <strong>[ images/char_02.jpg ]</strong><span style="font-size:0.85rem; margin-top:0.5rem;">파일을 폴더에 넣어주세요</span>
-            </div>
-          </div>
-
-          <div class="char-slide-item" style="width: 16.666%; flex-shrink: 0; height: 100%; position: relative; background: #eae4d8;">
-            <img src="images/char_03.jpg" alt="캐릭터3" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('char-fallback-3').style.display='flex';">
-            <div id="char-fallback-3" style="display: none; position: absolute; top:0; left:0; width:100%; height:100%; align-items:center; justify-content:center; flex-direction:column; color:#8a7962;">
-              <strong>[ images/char_03.jpg ]</strong><span style="font-size:0.85rem; margin-top:0.5rem;">파일을 폴더에 넣어주세요</span>
-            </div>
-          </div>
-
-          <div class="char-slide-item" style="width: 16.666%; flex-shrink: 0; height: 100%; position: relative; background: #eae4d8;">
-            <img src="images/char_04.jpg" alt="캐릭터4" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('char-fallback-4').style.display='flex';">
-            <div id="char-fallback-4" style="display: none; position: absolute; top:0; left:0; width:100%; height:100%; align-items:center; justify-content:center; flex-direction:column; color:#8a7962;">
-              <strong>[ images/char_04.jpg ]</strong><span style="font-size:0.85rem; margin-top:0.5rem;">파일을 폴더에 넣어주세요</span>
-            </div>
-          </div>
-
-          <div class="char-slide-item" style="width: 16.666%; flex-shrink: 0; height: 100%; position: relative; background: #eae4d8;">
-            <img src="images/char_05.jpg" alt="캐릭터5" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('char-fallback-5').style.display='flex';">
-            <div id="char-fallback-5" style="display: none; position: absolute; top:0; left:0; width:100%; height:100%; align-items:center; justify-content:center; flex-direction:column; color:#8a7962;">
-              <strong>[ images/char_05.jpg ]</strong><span style="font-size:0.85rem; margin-top:0.5rem;">파일을 폴더에 넣어주세요</span>
-            </div>
-          </div>
-
-          <div class="char-slide-item" style="width: 16.666%; flex-shrink: 0; height: 100%; position: relative; background: #eae4d8;">
-            <img src="images/char_06.jpg" alt="캐릭터6" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('char-fallback-6').style.display='flex';">
-            <div id="char-fallback-6" style="display: none; position: absolute; top:0; left:0; width:100%; height:100%; align-items:center; justify-content:center; flex-direction:column; color:#8a7962;">
-              <strong>[ images/char_06.jpg ]</strong><span style="font-size:0.85rem; margin-top:0.5rem;">파일을 폴더에 넣어주세요</span>
-            </div>
-          </div>
-
+      <div style="width: 100%; max-width: 950px; margin: 0 auto 3rem; border-radius: 8px; overflow: hidden; box-shadow: 0 15px 40px rgba(46,36,22,0.15); aspect-ratio: 16/9; background: var(--bg-card);">
+        <img src="images/home_main.png" alt="대하우스 메인 로고" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('home-fallback').style.display='flex';">
+        <div id="home-fallback" class="fallback-box" style="display: none;">
+          <span style="font-family: 'Nanum Myeongjo', serif; font-size: 1.5rem; font-weight: 700;">대하우스 메인 화면</span>
+          <p style="font-size: 0.9rem; margin-top: 0.5rem;">[ images/home_main.png 파일을 넣어주세요 ]</p>
         </div>
       </div>
 
-      <button class="slider-btn next-btn" onclick="moveCharSlider(1)" style="position: absolute; right: -20px; z-index: 10; border-radius: 50%; width: 45px; height: 45px; border: 1px solid #e1d7c6; background: #faf6ee; color: #5a4b36; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); font-weight: bold;">&gt;</button>
+      <button class="btn-primary" onclick="startTestMock()" style="padding: 1.2rem 4rem; font-size: 1.2rem; font-weight: 700; letter-spacing: 0.05em; border-radius: 50px; box-shadow: 0 6px 20px rgba(46,36,22,0.15);">테스트 시작하기</button>
     </div>
+  </section>
 
-    <div class="char-dots" style="display: flex; justify-content: center; gap: 10px; margin-top: 2rem;">
-      <span class="char-dot" onclick="goCharSlider(0)" style="width: 10px; height: 10px; border-radius: 50%; background: #5a4b36; cursor: pointer; opacity: 1; transition: opacity 0.3s;"></span>
-      <span class="char-dot" onclick="goCharSlider(1)" style="width: 10px; height: 10px; border-radius: 50%; background: #5a4b36; cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></span>
-      <span class="char-dot" onclick="goCharSlider(2)" style="width: 10px; height: 10px; border-radius: 50%; background: #5a4b36; cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></span>
-      <span class="char-dot" onclick="goCharSlider(3)" style="width: 10px; height: 10px; border-radius: 50%; background: #5a4b36; cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></span>
-      <span class="char-dot" onclick="goCharSlider(4)" style="width: 10px; height: 10px; border-radius: 50%; background: #5a4b36; cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></span>
-      <span class="char-dot" onclick="goCharSlider(5)" style="width: 10px; height: 10px; border-radius: 50%; background: #5a4b36; cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></span>
-    </div>
-
-  </div>
-</section>
-
-<section id="worldview" class="section">
-  <div class="world-content" style="text-align: center; max-width: 900px; padding: 4rem 2rem 6rem; margin: 0 auto;">
-    <div class="section-header" style="padding-bottom: 3rem;">
-      <div class="section-title">세계관</div>
-      <div class="section-title-deco">
-        <span class="deco-line"></span>
-        <span class="deco-mark">✦</span>
-        <span class="deco-line"></span>
-      </div>
-    </div>
-
-    <h2 style="font-family: 'Nanum Myeongjo', serif; font-size: 1.8rem; font-weight: 800; color: var(--ink); line-height: 1.6; letter-spacing: 0.04em; word-break: keep-all; margin-bottom: 3.5rem; padding: 0 1rem;">
-      "21세기 현대, 사람들의 눈을 피해 깊은 숲속에 살아가는<br>괴담 속 요괴들의 비밀스러운 쉐어하우스!"
-    </h2>
-
-    <div style="width: 100%; max-width: 700px; margin: 0 auto;">
-      <img src="images/world_house.png" alt="대하우스 전경" 
-        style="width: 100%; height: auto; display: block; border-radius: 4px; box-shadow: 0 12px 36px rgba(46,36,22,0.15);"
-        onerror="this.style.display='none'; document.getElementById('world-house-fallback').style.display='flex'">
-      
-      <div id="world-house-fallback" class="home-main-placeholder" style="display:none; aspect-ratio: 4/3;">
-        <span style="font-family: 'Nanum Myeongjo', serif; font-size: 1.2rem; color: var(--text-secondary); font-weight: 700;">대하우스 전경 일러스트</span>
-        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">[images/world_house.png 파일을 넣어주세요]</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="quiz" class="section">
-  <div class="quiz-wrap">
-    <div class="section-header" style="padding:3rem 0 2rem;text-align:center">
-      <div class="section-title">유형 테스트</div>
-      <div class="section-title-deco">
-        <span class="deco-line"></span>
-        <span class="deco-mark">✦</span>
-        <span class="deco-line"></span>
-      </div>
-      <p style="font-size:0.85rem;color:var(--text-muted);margin-top:1rem;letter-spacing:0.08em">나는 대하우스에서 어떤 요괴일까?</p>
-    </div>
-
-    <div class="quiz-card" id="quizCard">
-      <div class="quiz-progress" id="quizProgress">Q 1 / 5</div>
-      <div class="quiz-q" id="quizQ">새벽 2시, 갑자기 배가 고프다. 나는?</div>
-      <div class="quiz-options" id="quizOpts"></div>
-    </div>
-
-    <div class="quiz-result" id="quizResult">
-      <img src="" id="resultImg" class="quiz-result-img" alt="결과 이미지" 
-        onerror="this.style.background='var(--bg-accent)'; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><text y=\'50%\' x=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%238c7a60\' font-size=\'11\'>No Image</text></svg>.'">
-      <div class="quiz-result-name" id="resultName"></div>
-      <div class="quiz-result-type" id="resultType"></div>
-      <p class="quiz-result-desc" id="resultDesc"></p>
-      
-      <div class="quiz-btn-group">
-        <button class="quiz-restart" onclick="restartQuiz()">다시 하기</button>
-        <button class="quiz-share" onclick="shareResult()">결과 공유</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="goods" class="section">
-  <div class="section-header">
-    <div class="section-title">굿즈샵</div>
-    <div class="section-title-deco">
-      <span class="deco-line"></span>
-      <span class="deco-mark">✦</span>
-      <span class="deco-line"></span>
-    </div>
-  </div>
-
-  <div class="goods-wrap">
-    <div class="goods-grid" id="goodsGrid"></div>
-  </div>
-</section>
-
-<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
-
-<div class="cart-drawer" id="cartDrawer">
-  <div class="cart-drawer-head">
-    <span class="cart-drawer-title">장바구니</span>
-    <button class="cart-close" onclick="toggleCart()">✕</button>
-  </div>
-  <div class="cart-body" id="cartBody">
-    <div class="cart-empty" id="cartEmpty">장바구니가 비어 있습니다.</div>
-  </div>
-  <div class="cart-footer">
-    <div class="cart-total">
-      <span class="cart-total-label">합계</span>
-      <span class="cart-total-price" id="cartTotal">₩0</span>
-    </div>
-    <button class="cart-checkout" onclick="checkout()">구매하기</button>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<footer>© 대하우스: 요괴들의 비밀스러운 동거</footer>
-
-<script>
-/* ─── NAV SYSTEM ─── */
-function showSection(id) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-tabs a').forEach(a => a.classList.remove('active'));
-  
-  const targetSection = document.getElementById(id);
-  if (targetSection) targetSection.classList.add('active');
-  
-  const links = document.querySelectorAll('.nav-tabs a');
-  const map = {home:0, characters:1, worldview:2, quiz:3, goods:4};
-  if (links[map[id]]) links[map[id]].classList.add('active');
-  
-  window.scrollTo(0,0);
-  return false;
-}
-
-/* ─── DATA STORE ─── */
-// 캐릭터 탭 리스트 데이터 (요청 순서 보장 및 이미지 매핑)
-const characterList = [
-  { name: '매령', type: '수목요괴 · 은자형', img: 'images/char_01.png', desc: '조용히 창가를 지키는 나무처럼 차분하고 성숙한 타입' },
-  { name: '대하', type: '대하요괴 · 카리스마형', img: 'images/char_02.png', desc: '대하우스의 실질적 리더! 듬직하고 거침없는 매력의 소유자' },
-  { name: '구미희', type: '여우요괴 · 변신의 달인', img: 'images/char_03.png', desc: '눈부신 매력으로 언제 어디서나 분위기를 주도하는 타입' },
-  { name: '목정훈', type: '목정요괴 · 모범생형', img: 'images/char_04.png', desc: '성실하고 다정하며 주변 사람들을 상냥하게 챙기는 타입' },
-  { name: '김현야호', type: '야호요괴 · 유령형', img: 'images/char_05.png', desc: '존재감이 가끔 흐려지지만 조용히 할 일을 하는 타입' },
-  { name: '설', type: '설인요괴 · 순수형', img: 'images/char_06.png', desc: '새하얗고 순수한 눈처럼 맑고 통통 튀는 활발한 타입' }
-];
-
-// 테스트 결과 최종 매핑 데이터
-const results = {
-  maerueong: { name: '매령', type: '수목요괴 · 은자형', img: 'images/result_maerueong.png', desc: '조용히 창가를 지키는 나무처럼 차분하고 성숙한 타입' },
-  geoha: { name: '대하', type: '대하요괴 · 카리스마형', img: 'images/result_geoha.png', desc: '대하우스의 실질적 리더! 듬직하고 거침없는 매력의 소유자' },
-  gumihee: { name: '구미희', type: '여우요괴 · 변신의 달인', img: 'images/result_gumihee.png', desc: '눈부신 매력으로 언제 어디서나 분위기를 주도하는 타입' },
-  mokjeonghun: { name: '목정훈', type: '목정요괴 · 모범생형', img: 'images/result_mokjeonghun.png', desc: '성실하고 다정하며 주변 사람들을 상냥하게 챙기는 타입' },
-  kimhyeonyaho: { name: '김현야호', type: '야호요괴 · 유령형', img: 'images/result_kimhyeonyaho.png', desc: '존재감이 가끔 흐려지지만 조용히 할 일을 하는 타입' },
-  seol: { name: '설', type: '설인요괴 · 순수형', img: 'images/result_seol.png', desc: '새하얗고 순수한 눈처럼 맑고 통통 튀는 활발한 타입' }
-};
-
-/* ─── QUIZ SYSTEM (알고리즘 밸런싱 최적화) ─── */
-const quizData = [
-  {
-    q: '새벽 2시, 갑자기 배가 고프다. 나는?',
-    opts: [
-      { text: '참는다. 어차피 자면 잊는다', scores: { maerueong: 3, kimhyeonyaho: 2 } },
-      { text: '동거인을 깨워 같이 먹자고 한다', scores: { seol: 3, gumihee: 2 } },
-      { text: '냉장고를 열어 있는 걸 다 꺼낸다', scores: { geoha: 3, gumihee: 1 } },
-      { text: '요리를 시작한다. 이왕이면 거하게', scores: { mokjeonghun: 3, geoha: 1 } }
-    ]
-  },
-  {
-    q: '동거인이 내 물건을 몰래 썼다는 사실을 알았다. 나는?',
-    opts: [
-      { text: '나도 그의 물건을 몰래 쓴다. 이건 관습이다', scores: { gumihee: 3, seol: 1 } },
-      { text: '모른 척 넘어간다. 크게 중요하지 않으니', scores: { kimhyeonyaho: 3, maerueong: 2 } },
-      { text: '직접 말한다. 솔직하게, 그러나 상냥하게', scores: { mokjeonghun: 3, geoha: 2 } },
-      { text: '쪽지를 남긴다. 말하기가 좀 그래서', scores: { maerueong: 3, kimhyeonyaho: 1 } }
-    ]
-  },
-  {
-    q: '대하우스 거실에서 이상한 소리가 난다. 나는?',
-    opts: [
-      { text: '소리의 정체가 뭔지 기록해 둔다', scores: { mokjeonghun: 3, maerueong: 1 } },
-      { text: '즉시 달려가 확인한다', scores: { geoha: 3, seol: 2 } },
-      { text: '문을 잠그고 이불을 뒤집어 쓴다', scores: { kimhyeonyaho: 3, maerueong: 1 } },
-      { text: '귀신인지 의심하며 소금을 뿌린다', scores: { gumihee: 3, seol: 2 } }
-    ]
-  },
-  {
-    q: '오늘 내 감정 상태는?',
-    opts: [
-      { text: '차분하고 조용하다', scores: { maerueong: 3, kimhyeonyaho: 2 } },
-      { text: '기운차고 활기차다', scores: { seol: 3, gumihee: 2 } },
-      { text: '감정? 오늘 밥은 먹었나', scores: { geoha: 3, mokjeonghun: 1 } },
-      { text: '알 수 없다, 뭔가 묘하다', scores: { gumihee: 3, kimhyeonyaho: 1 } }
-    ]
-  },
-  {
-    q: '내가 요괴라면, 어떤 능력을 가지고 싶을까?',
-    opts: [
-      { text: '성실하게 세상을 돕는 정화 능력', scores: { mokjeonghun: 3, geoha: 2 } },
-      { text: '투명인간 — 보이지 않고 관찰만', scores: { kimhyeonyaho: 3, maerueong: 2 } },
-      { text: '변신 — 누구든 될 수 있다', scores: { gumihee: 3, geoha: 1 } },
-      { text: '모두를 행복하게 만드는 눈꽃 마법', scores: { seol: 3, mokjeonghun: 1 } }
-    ]
-  }
-];
-
-let quizStep = 0;
-// 특정 항목 몰림 방지 캐릭터별 스코어 카운팅 바구니
-let userScores = { kimhyeonyaho: 0, maerueong: 0, seol: 0, gumihee: 0, mokjeonghun: 0, geoha: 0 };
-
-function renderQuiz() {
-  const currentQuestion = quizData[quizStep];
-  document.getElementById('quizProgress').innerText = `Q ${quizStep + 1} / ${quizData.length}`;
-  document.getElementById('quizQ').innerText = currentQuestion.q;
-  
-  const optionsContainer = document.getElementById('quizOpts');
-  optionsContainer.innerHTML = '';
-  
-  currentQuestion.opts.forEach((opt) => {
-    const btn = document.createElement('button');
-    btn.className = 'quiz-opt';
-    btn.innerText = opt.text;
-    
-    btn.onclick = function() {
-      // 선택지 성향 누적 계산
-      for (let charKey in opt.scores) {
-        userScores[charKey] += opt.scores[charKey];
-      }
-      
-      quizStep++;
-      if (quizStep < quizData.length) {
-        renderQuiz();
-      } else {
-        showResult();
-      }
-    };
-    optionsContainer.appendChild(btn);
-  });
-}
-
-function showResult() {
-  document.getElementById('quizCard').style.display = 'none';
-  document.getElementById('quizResult').style.display = 'block';
-
-  // 가장 점수가 높은 요괴 산출 (동점 시 밸런스를 고려해 첫 매칭 우선순위 부여)
-  let maxScore = -1;
-  let finalCharacterKey = 'gumihee'; 
-
-  for (let key in userScores) {
-    if (userScores[key] > maxScore) {
-      maxScore = userScores[key];
-      finalCharacterKey = key;
-    }
-  }
-
-  const userCharacter = results[finalCharacterKey];
-
-  document.getElementById('resultName').innerText = userCharacter.name;
-  document.getElementById('resultType').innerText = userCharacter.type;
-  document.getElementById('resultDesc').innerText = userCharacter.desc;
-  
-  const resultImgElement = document.getElementById('resultImg');
-  if (resultImgElement) {
-    resultImgElement.src = userCharacter.img;
-    resultImgElement.alt = userCharacter.name;
-    resultImgElement.style.display = 'block';
-  }
-}
-
-function restartQuiz() {
-  quizStep = 0; 
-  userScores = { kimhyeonyaho: 0, maerueong: 0, seol: 0, gumihee: 0, mokjeonghun: 0, geoha: 0 };
-  document.getElementById('quizCard').style.display = 'block';
-  document.getElementById('quizResult').style.display = 'none';
-  renderQuiz();
-}
-
-function shareResult() {
-  showToast('🔗 결과 링크가 클립보드에 복사되었습니다!');
-}
-
-/* ─── CHARACTERS TAB DYNAMIC RENDER ─── */
-function renderCharacters() {
-  const carouselContainer = document.getElementById('charCarousel');
-  if (!carouselContainer) return;
-  
-  carouselContainer.innerHTML = characterList.map((char) => `
-    <div class="char-card">
-      <img src="${char.img}" alt="${char.name}" class="char-card-img"
-        onerror="this.outerHTML='<div class=\'char-card-img-placeholder\'><span>${char.img.split('/').pop()}</span></div>'">
-      <div class="char-card-body">
-        <div class="char-name">${char.name}</div>
-        <div class="char-type">${char.type}</div>
-        <p class="char-desc">${char.desc}</p>
-      </div>
-    </div>
-  `).join('');
-  
-  window.cards = carouselContainer.querySelectorAll('.char-card');
-  buildDots();
-}
-
-/* ─── CAROUSEL SYSTEM ─── */
-const carousel = document.getElementById('charCarousel');
-const dotsWrap = document.getElementById('carouselDots');
-
-function buildDots() {
-  if (!dotsWrap || !window.cards) return;
-  dotsWrap.innerHTML = '';
-  window.cards.forEach((_, i) => {
-    const d = document.createElement('button');
-    d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-    d.onclick = () => {
-      window.cards[i].scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
-    };
-    dotsWrap.appendChild(d);
-  });
-}
-
-function updateDots() {
-  if (!carousel || !dotsWrap || !window.cards || window.cards.length === 0) return;
-  const scrollLeft = carousel.scrollLeft;
-  const cardW = window.cards[0] ? window.cards[0].offsetWidth : carousel.offsetWidth;
-  const idx = Math.round(scrollLeft / cardW);
-  dotsWrap.querySelectorAll('.carousel-dot').forEach((d,i) => {
-    d.classList.toggle('active', i === idx);
-  });
-}
-
-function scrollCarousel(dir) {
-  if (!carousel || !window.cards || window.cards.length === 0) return;
-  const cardW = window.cards[0] ? window.cards[0].offsetWidth : carousel.offsetWidth;
-  carousel.scrollBy({left: dir * cardW, behavior: 'smooth'});
-}
-
-if (carousel) {
-  carousel.addEventListener('scroll', updateDots);
-}
-
-/* ─── GOODS SHOP SYSTEM ─── */
-const goodsData = [
-  { id: 1, name: '대하 인형', price: 15000, img: 'images/goods_doll_geoha.png' },
-  { id: 2, name: '설 인형', price: 15000, img: 'images/goods_doll_seol.png' },
-  { id: 3, name: '목정훈 키링', price: 9800, img: 'images/goods_keyring_mokjeonghun.png' },
-  { id: 4, name: '구미희 키링', price: 9800, img: 'images/goods_keyring_gumihee.png' },
-  { id: 5, name: '매령 키링', price: 9800, img: 'images/goods_keyring_maeryeong.png' },
-  { id: 6, name: '김현야호 키링', price: 9800, img: 'images/goods_keyring_kimhyeonyaho.png' },
-];
-
-let cart = [];
-
-function renderGoods() {
-  const grid = document.getElementById('goodsGrid');
-  if (!grid) return;
-  grid.innerHTML = goodsData.map(g => `
-    <div class="goods-card">
-      <img src="${g.img}" alt="${g.name}" class="goods-img"
-        onerror="this.outerHTML='<div class=\'goods-img-placeholder\'><span>${g.img.split('/').pop()}</span></div>'">
-      <div class="goods-info">
-        <div class="goods-name">${g.name}</div>
-        <div class="goods-price">₩${g.price.toLocaleString()}</div>
-      </div>
-      <button class="goods-add-btn" onclick="addToCart(${g.id})">장바구니 담기</button>
-    </div>
-  `).join('');
-}
-
-/* ─── CART SYSTEM ─── */
-function toggleCart() {
-  document.getElementById('cartOverlay').classList.toggle('open');
-  document.getElementById('cartDrawer').classList.toggle('open');
-}
-
-function addToCart(id) {
-  const item = goodsData.find(g => g.id === id);
-  const exist = cart.find(c => c.id === id);
-  if (exist) {
-    exist.qty++;
-  } else {
-    cart.push({ ...item, qty: 1 });
-  }
-  updateCart();
-  showToast(`🎁 ${item.name}이(가) 장바구니에 추가되었습니다.`);
-}
-
-function updateCart() {
-  const cartBody = document.getElementById('cartBody');
-  const cartBadge = document.getElementById('cartBadge');
-  const cartTotal = document.getElementById('cartTotal');
-  
-  let totalQty = 0;
-  let totalPrice = 0;
-  
-  if (cart.length === 0) {
-    cartBody.innerHTML = '<div class="cart-empty">장바구니가 비어 있습니다.</div>';
-    cartBadge.style.display = 'none';
-  } else {
-    cartBadge.style.display = 'flex';
-    cartBody.innerHTML = cart.map(item => {
-      totalQty += item.qty;
-      totalPrice += (item.price * item.qty);
-      return `
-        <div class="cart-item">
-          <img src="${item.img}" class="cart-item-img" onerror="this.style.background='var(--bg-accent)'">
-          <div>
-            <div class="cart-item-name">${item.name}</div>
-            <div class="cart-item-price">₩${item.price.toLocaleString()}</div>
-            <div class="cart-item-qty">
-              <button class="qty-btn" onclick="changeQty(${item.id}, -1)">-</button>
-              <span class="qty-num">${item.qty}</span>
-              <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
-            </div>
-          </div>
-          <button class="cart-item-del" onclick="deleteCartItem(${item.id})">✕</button>
+  <section id="worldview" class="section">
+    <div style="text-align: center; max-width: 950px; margin: 0 auto; padding: 2rem 1rem 6rem;">
+      <div class="section-header">
+        <div class="section-title">세계관</div>
+        <div class="section-title-deco">
+          <span class="deco-line"></span>
+          <span class="deco-mark">✦</span>
+          <span class="deco-line"></span>
         </div>
-      `;
-    }).join('');
-  }
-  
-  cartBadge.innerText = totalQty;
-  cartTotal.innerText = `₩${totalPrice.toLocaleString()}`;
-}
+      </div>
 
-function changeQty(id, delta) {
-  const item = cart.find(c => c.id === id);
-  if (!item) return;
-  item.qty += delta;
-  if (item.qty <= 0) {
-    deleteCartItem(id);
-  } else {
-    updateCart();
-  }
-}
+      <h2 style="font-family: 'Nanum Myeongjo', serif; font-size: 1.9rem; font-weight: 800; color: var(--ink); line-height: 1.6; letter-spacing: 0.04em; word-break: keep-all; margin-bottom: 3.5rem; padding: 0 1rem;">
+        "21세기 현대, 사람들의 눈을 피해 깊은 숲속에 살아가는<br>괴담 속 요괴들의 비밀스러운 쉐어하우스!"
+      </h2>
 
-function deleteCartItem(id) {
-  cart = cart.filter(c => c.id !== id);
-  updateCart();
-}
+      <div style="width: 100%; max-width: 750px; margin: 0 auto; border-radius: 8px; overflow: hidden; box-shadow: 0 12px 36px rgba(46,36,22,0.15); aspect-ratio: 16/9; background: var(--bg-card);">
+        <img src="images/world_house.png" alt="대하우스 전경" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('world-fallback').style.display='flex';">
+        <div id="world-fallback" class="fallback-box" style="display: none;">
+          <span style="font-family: 'Nanum Myeongjo', serif; font-size: 1.2rem; font-weight: 700;">대하우스 전경 이미지</span>
+          <p style="font-size: 0.85rem; margin-top: 0.5rem;">[ images/world_house.png 파일을 넣어주세요 ]</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-function checkout() {
-  if(cart.length === 0) {
-    showToast('❌ 장바구니가 비어 있습니다.');
-    return;
-  }
-  showToast('주문이 완료되었습니다! 요괴 배송이 시작됩니다. 🚚');
-  cart = [];
-  updateCart();
-  setTimeout(toggleCart, 1000);
-}
+  <section id="characters" class="section">
+    <div style="max-width: 1100px; margin: 0 auto; padding: 2rem 1rem 6rem;">
+      <div class="section-header">
+        <div class="section-title">캐릭터</div>
+        <div class="section-title-deco">
+          <span class="deco-line"></span>
+          <span class="deco-mark">✦</span>
+          <span class="deco-line"></span>
+        </div>
+      </div>
 
-/* ─── TOAST NOTIFICATION ─── */
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.innerText = msg;
-  t.classList.add('show');
-  setTimeout(() => { t.classList.remove('show'); }, 2500);
-}
+      <div style="position: relative; display: flex; align-items: center; justify-content: center; width: 100%;">
+        <button onclick="moveCharSlider(-1)" style="position: absolute; left: -15px; z-index: 10; border-radius: 50%; width: 45px; height: 45px; border: 1px solid #e1d7c6; background: #faf6ee; color: #5a4b36; cursor: pointer; font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">&lt;</button>
 
-/* ─── INITIAL APP LOAD ─── */
-window.addEventListener('DOMContentLoaded', () => {
-  renderQuiz();
-  renderCharacters();
-  renderGoods();
-});
+        <div style="width: 100%; max-width: 900px; overflow: hidden; border-radius: 8px; box-shadow: 0 12px 35px rgba(46,36,22,0.15); background: var(--bg-card); aspect-ratio: 16/9;">
+          <div id="charSliderTrack" style="display: flex; transition: transform 0.4s ease-in-out; width: 600%; height: 100%;">
+            
+            <div style="width: 16.666%; flex-shrink: 0; height: 100%; position: relative;">
+              <img src="images/char_01.png" alt="캐릭터 1" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-1').style.display='flex';">
+              <div id="c-fb-1" class="fallback-box" style="display: none;"><strong>[ images/char_01.png ]</strong></div>
+            </div>
+            <div style="width: 16.666%; flex-shrink: 0; height: 100%; position: relative;">
+              <img src="images/char_02.png" alt="캐릭터 2" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-2').style.display='flex';">
+              <div id="c-fb-2" class="fallback-box" style="display: none;"><strong>[ images/char_02.png ]</strong></div>
+            </div>
+            <div style="width: 16.666%; flex-shrink: 0; height: 100%; position: relative;">
+              <img src="images/char_03.png" alt="캐릭터 3" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-3').style.display='flex';">
+              <div id="c-fb-3" class="fallback-box" style="display: none;"><strong>[ images/char_03.png ]</strong></div>
+            </div>
+            <div style="width: 16.666%; flex-shrink: 0; height: 100%; position: relative;">
+              <img src="images/char_04.png" alt="캐릭터 4" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-4').style.display='flex';">
+              <div id="c-fb-4" class="fallback-box" style="display: none;"><strong>[ images/char_04.png ]</strong></div>
+            </div>
+            <div style="width: 16.666%; flex-shrink: 0; height: 100%; position: relative;">
+              <img src="images/char_05.png" alt="캐릭터 5" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-5').style.display='flex';">
+              <div id="c-fb-5" class="fallback-box" style="display: none;"><strong>[ images/char_05.png ]</strong></div>
+            </div>
+            <div style="width: 16.666%; flex-shrink: 0; height: 100%; position: relative;">
+              <img src="images/char_06.png" alt="캐릭터 6" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('c-fb-6').style.display='flex';">
+              <div id="c-fb-6" class="fallback-box" style="display: none;"><strong>[ images/char_06.png ]</strong></div>
+            </div>
 
-// 캐릭터 이미지 슬라이더 제어 스크립트
-let currentCharIdx = 0;
-const totalCharSlides = 6;
+          </div>
+        </div>
 
-function updateCharSlider() {
-  const track = document.getElementById('charSliderTrack');
-  const dots = document.querySelectorAll('.char-dot');
-  
-  if (!track) return;
-  
-  // 6개 슬라이드가 있으므로 한 칸 이동할 때마다 -16.666%씩 이동
-  const movePercentage = currentCharIdx * (100 / totalCharSlides);
-  track.style.transform = `translateX(-${movePercentage}%)`;
-  
-  // 하단 점(도트) 활성화 상태 불빛 켜고 끄기
-  dots.forEach((dot, idx) => {
-    if (idx === currentCharIdx) {
-      dot.style.opacity = '1';
-    } else {
-      dot.style.opacity = '0.3';
+        <button onclick="moveCharSlider(1)" style="position: absolute; right: -15px; z-index: 10; border-radius: 50%; width: 45px; height: 45px; border: 1px solid #e1d7c6; background: #faf6ee; color: #5a4b36; cursor: pointer; font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">&gt;</button>
+      </div>
+
+      <div style="display: flex; justify-content: center; gap: 10px; margin-top: 2rem;">
+        <span class="char-dot" onclick="goCharSlider(0)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 1; transition: opacity 0.3s;"></span>
+        <span class="char-dot" onclick="goCharSlider(1)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></span>
+        <span class="char-dot" onclick="goCharSlider(2)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></span>
+        <span class="char-dot" onclick="goCharSlider(3)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></span>
+        <span class="char-dot" onclick="goCharSlider(4)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></span>
+        <span class="char-dot" onclick="goCharSlider(5)" style="width: 10px; height: 10px; border-radius: 50%; background: var(--ink); cursor: pointer; opacity: 0.3; transition: opacity 0.3s;"></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="result" class="section">
+    <div style="max-width: 800px; margin: 0 auto; padding: 2rem 1rem 6rem; text-align: center;">
+      <div class="section-header">
+        <div class="section-title">테스트 결과</div>
+        <div class="section-title-deco">
+          <span class="deco-line"></span>
+          <span class="deco-mark">✦</span>
+          <span class="deco-line"></span>
+        </div>
+      </div>
+
+      <div style="width: 100%; max-width: 520px; margin: 0 auto 3.5rem; border-radius: 12px; overflow: hidden; box-shadow: 0 15px 45px rgba(46,36,22,0.18); background: var(--bg-card); aspect-ratio: 4/5;">
+        <img id="resultTypeImage" src="" alt="결과 카드" style="width: 100%; height: 100%; object-fit: contain; display: block;" onerror="this.style.display='none'; document.getElementById('result-fallback').style.display='flex';">
+        <div id="result-fallback" class="fallback-box" style="display: none;">
+          <span style="font-family: 'Nanum Myeongjo', serif; font-size: 1.2rem; font-weight: 700;">결과 리포트 카드 이미지</span>
+          <p id="fallback-img-name" style="font-size: 0.85rem; margin-top: 0.5rem;"></p>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: center; gap: 1.5rem; max-width: 450px; margin: 0 auto;">
+        <button class="btn-secondary" onclick="restartTest()" style="flex: 1; padding: 1.1rem; font-size: 1.05rem; font-weight: 700; border-radius: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.02);">다시하기</button>
+        <button class="btn-primary" onclick="shareResult()" style="flex: 1; padding: 1.1rem; font-size: 1.05rem; font-weight: 700; border-radius: 30px; box-shadow: 0 4px 15px rgba(46,36,22,0.15);">결과 공유</button>
+      </div>
+    </div>
+  </section>
+
+
+  <script>
+    // 1. 네비게이션 탭 스위칭 매커니즘
+    function switchTab(tabId) {
+      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+      document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+      
+      const targetSection = document.getElementById(tabId);
+      const targetNavLink = document.getElementById('nav-' + tabId);
+      
+      if (targetSection) targetSection.classList.add('active');
+      if (targetNavLink) targetNavLink.classList.add('active');
+      
+      window.scrollTo(0, 0);
     }
-  });
-}
 
-function moveCharSlider(direction) {
-  currentCharIdx += direction;
-  if (currentCharIdx < 0) {
-    currentCharIdx = totalCharSlides - 1; // 처음에서 왼쪽 가려하면 마지막으로
-  } else if (currentCharIdx >= totalCharSlides) {
-    currentCharIdx = 0; // 마지막에서 오른쪽 가려하면 처음으로
-  }
-  updateCharSlider();
-}
+    // 좌측 상단 '대하우스' 로고 리셋 메인 복귀 함수
+    function resetToHome() {
+      switchTab('home');
+    }
 
-function goCharSlider(idx) {
-  currentCharIdx = idx;
-  updateCharSlider();
-}
+    // 2. 캐릭터 탭 전용 슬라이더 기능 제어
+    let currentCharIdx = 0;
+    const totalCharSlides = 6;
 
-</script>
+    function updateCharSlider() {
+      const track = document.getElementById('charSliderTrack');
+      const dots = document.querySelectorAll('.char-dot');
+      if (!track) return;
+
+      const movePercentage = currentCharIdx * (100 / totalCharSlides);
+      track.style.transform = `translateX(-${movePercentage}%)`;
+
+      dots.forEach((dot, idx) => {
+        dot.style.opacity = (idx === currentCharIdx) ? '1' : '0.3';
+      });
+    }
+
+    // 화살표 작동 함수
+    function moveCharSlider(direction) {
+      currentCharIdx += direction;
+      if (currentCharIdx < 0) currentCharIdx = totalCharSlides - 1;
+      else if (currentCharIdx >= totalCharSlides) currentCharIdx = 0;
+      updateCharSlider();
+    }
+
+    // 점(도트) 클릭 함수
+    function goCharSlider(idx) {
+      currentCharIdx = idx;
+      updateCharSlider();
+    }
+
+    // 3. 테스트 연동 및 결과 처리 함수 (.png 버전 반영)
+    function startTestMock() {
+      const types = ['result_01.png', 'result_02.png', 'result_03.png', 'result_04.png', 'result_05.png', 'result_06.png'];
+      const randomType = types[Math.floor(Math.random() * types.length)];
+      showResult(randomType);
+    }
+
+    function showResult(resultImageFileName) {
+      switchTab('result');
+      
+      const resultImgElement = document.getElementById('resultTypeImage');
+      const fallbackNameElement = document.getElementById('fallback-img-name');
+      
+      if (resultImgElement) {
+        resultImgElement.src = 'images/' + resultImageFileName;
+        resultImgElement.style.display = 'block';
+      }
+      
+      if (fallbackNameElement) {
+        fallbackNameElement.innerText = `[ images/${resultImageFileName} 파일을 넣어주세요 ]`;
+        document.getElementById('result-fallback').style.display = 'none'; 
+      }
+    }
+
+    function restartTest() {
+      switchTab('home');
+    }
+
+    function shareResult() {
+      const url = window.location.href;
+      navigator.clipboard.writeText(url).then(() => {
+        alert('대하우스 입주 계약서 주소가 복사되었습니다! 친구들에게 공유해보세요. ✦');
+      }).catch(() => {
+        alert('주소창의 링크를 복사하여 전송해 주세요!');
+      });
+    }
+  </script>
 </body>
 </html>
