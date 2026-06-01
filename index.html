@@ -970,7 +970,7 @@
     </div>
 
     <div class="world-block">
-      <div class="world-block-title">주인장 거하</div>
+      <div class="world-block-title">주인장 거대하</div>
       <p>대하우스의 실질적 관리자. 정체불명의 나이와 정체불명의 종족. 늘 따뜻한 차를 내어주며, 모든 소동의 끝에서 조용히 웃고 있다.</p>
     </div>
   </div>
@@ -1117,8 +1117,8 @@ if (carousel) {
 
 /* ─── GOODS DATA (수정: 인형 세트 개별 분리 및 이미지 파일명 지정) ─── */
 const goodsData = [
-  { id: 1, name: '거하 인형', price: 15000, img: 'images/goods_doll_geoha.png' },
-  { id: 6, name: '설이 인형', price: 15000, img: 'images/goods_doll_seol.png' },
+  { id: 1, name: '대하 인형', price: 15000, img: 'images/goods_doll_geoha.png' },
+  { id: 6, name: '설 인형', price: 15000, img: 'images/goods_doll_seol.png' },
   { id: 2, name: '목정훈 키링', price: 9800, img: 'images/goods_keyring_mokjeonghun.png' },
   { id: 3, name: '구미희 키링', price: 9800, img: 'images/goods_keyring_gumihee.png' },
   { id: 4, name: '매령 키링', price: 9800, img: 'images/goods_keyring_maeryeong.png' },
@@ -1284,10 +1284,10 @@ const quizData = [
 const results = [
   { name: '김현야호', type: '야호요괴 · 유령형', img: 'images/result_kimhyeonyaho.png', desc: '존재감이 가끔 흐려지지만 조용히 할 일을 하는 타입' },
   { name: '매령', type: '수목요괴 · 은자형', img: 'images/result_maeryeong.png', desc: '조용히 창가를 지키는 나무처럼 차분하고 성숙한 타입' },
-  { name: '설이', type: '설인요괴 · 순수형', img: 'images/result_seol.png', desc: '새하얗고 순수한 눈처럼 맑고 통통 튀는 활발한 타입' },
+  { name: '설', type: '설인요괴 · 순수형', img: 'images/result_seol.png', desc: '새하얗고 순수한 눈처럼 맑고 통통 튀는 활발한 타입' },
   { name: '구미희', type: '여우요괴 · 변신의 달인', img: 'images/result_gumihee.png', desc: '눈부신 매력으로 언제 어디서나 분위기를 주도하는 타입' },
   { name: '목정훈', type: '목정요괴 · 모범생형', img: 'images/result_mokjeonghun.png', desc: '성실하고 다정하며 주변 사람들을 상냥하게 챙기는 타입' },
-  { name: '거하', type: '대하요괴 · 카리스마형', img: 'images/result_geoha.png', desc: '대하우스의 실질적 리더! 듬직하고 거침없는 매력의 소유자' }
+  { name: '대하', type: '대하요괴 · 카리스마형', img: 'images/result_geoha.png', desc: '대하우스의 실질적 리더! 듬직하고 거침없는 매력의 소유자' }
 ];
 
 let quizStep = 0;
@@ -1335,11 +1335,10 @@ function showResult() {
   
   if (avgScore <= 1.5) resultIdx = 0;      // 김현야호
   else if (avgScore <= 2.5) resultIdx = 1; // 매령
-  else if (avgScore <= 3.5) resultIdx = 2; // 설이
+  else if (avgScore <= 3.5) resultIdx = 2; // 설
   else if (avgScore <= 4.5) resultIdx = 3; // 구미희
   else if (avgScore <= 5.5) resultIdx = 4; // 목정훈
-  else resultIdx = 5;                      // 거하
-
+  else resultIdx = 5;                      // 대하
   const userCharacter = results[resultIdx];
 
   document.getElementById('resultName').innerText = userCharacter.name;
