@@ -116,7 +116,7 @@
   .section { display: none; padding-top: 64px; min-height: 100vh; }
   .section.active { display: block; }
 
-  /* ─── HOME (수정: 전체 이미지화 레이아웃) ─── */
+  /* ─── HOME ─── */
   #home {
     display: none;
     flex-direction: column;
@@ -156,7 +156,7 @@
     border: 1px dashed var(--border);
   }
 
-  /* ─── CHARACTERS (수정: 가로 이미지 4:3 비율 변경) ─── */
+  /* ─── CHARACTERS ─── */
   #characters {
     display: none;
     flex-direction: column;
@@ -236,7 +236,7 @@
 
   .char-card-img {
     width: 100%;
-    aspect-ratio: 4/3; /* 세로 3:4에서 가로 4:3으로 변경 */
+    aspect-ratio: 4/3;
     object-fit: cover;
     display: block;
     background: var(--bg-accent);
@@ -244,7 +244,7 @@
 
   .char-card-img-placeholder {
     width: 100%;
-    aspect-ratio: 4/3; /* 비율 변경 */
+    aspect-ratio: 4/3;
     background: var(--bg-accent);
     display: flex;
     align-items: center;
@@ -364,7 +364,7 @@
     color: var(--text-secondary);
   }
 
-  /* ─── QUIZ (수정: 결과 이미지 및 공유 버튼 추가) ─── */
+  /* ─── QUIZ ─── */
   #quiz {
     display: none;
     flex-direction: column;
@@ -420,6 +420,7 @@
     font-family: 'Noto Serif KR', serif;
     text-align: left;
     line-height: 1.6;
+    width: 100%;
   }
 
   .quiz-opt:hover {
@@ -871,69 +872,7 @@
       <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
 
-    <div class="char-carousel" id="charCarousel">
-
-      <div class="char-card">
-        <img src="images/char_01.png" alt="캐릭터 1" class="char-card-img"
-          onerror="this.outerHTML='<div class=\'char-card-img-placeholder\'><span>char_01.png (4:3)</span></div>'">
-        <div class="char-card-body">
-          <div class="char-name">캐릭터 이름 1</div>
-          <div class="char-type">종족 · 역할</div>
-          <p class="char-desc">여기에 캐릭터 상세 설명 문구를 채워 넣을 수 있습니다.</p>
-        </div>
-      </div>
-
-      <div class="char-card">
-        <img src="images/char_02.png" alt="캐릭터 2" class="char-card-img"
-          onerror="this.outerHTML='<div class=\'char-card-img-placeholder\'><span>char_02.png (4:3)</span></div>'">
-        <div class="char-card-body">
-          <div class="char-name">캐릭터 이름 2</div>
-          <div class="char-type">종족 · 역할</div>
-          <p class="char-desc">여기에 캐릭터 상세 설명 문구를 채워 넣을 수 있습니다.</p>
-        </div>
-      </div>
-
-      <div class="char-card">
-        <img src="images/char_03.png" alt="캐릭터 3" class="char-card-img"
-          onerror="this.outerHTML='<div class=\'char-card-img-placeholder\'><span>char_03.png (4:3)</span></div>'">
-        <div class="char-card-body">
-          <div class="char-name">캐릭터 이름 3</div>
-          <div class="char-type">종족 · 역할</div>
-          <p class="char-desc">여기에 캐릭터 상세 설명 문구를 채워 넣을 수 있습니다.</p>
-        </div>
-      </div>
-
-      <div class="char-card">
-        <img src="images/char_04.png" alt="캐릭터 4" class="char-card-img"
-          onerror="this.outerHTML='<div class=\'char-card-img-placeholder\'><span>char_04.png (4:3)</span></div>'">
-        <div class="char-card-body">
-          <div class="char-name">캐릭터 이름 4</div>
-          <div class="char-type">종족 · 역할</div>
-          <p class="char-desc">여기에 캐릭터 상세 설명 문구를 채워 넣을 수 있습니다.</p>
-        </div>
-      </div>
-
-      <div class="char-card">
-        <img src="images/char_05.png" alt="캐릭터 5" class="char-card-img"
-          onerror="this.outerHTML='<div class=\'char-card-img-placeholder\'><span>char_05.png (4:3)</span></div>'">
-        <div class="char-card-body">
-          <div class="char-name">캐릭터 이름 5</div>
-          <div class="char-type">종족 · 역할</div>
-          <p class="char-desc">여기에 캐릭터 상세 설명 문구를 채워 넣을 수 있습니다.</p>
-        </div>
-      </div>
-
-      <div class="char-card">
-        <img src="images/char_06.png" alt="캐릭터 6" class="char-card-img"
-          onerror="this.outerHTML='<div class=\'char-card-img-placeholder\'><span>char_06.png (4:3)</span></div>'">
-        <div class="char-card-body">
-          <div class="char-name">캐릭터 이름 6</div>
-          <div class="char-type">종족 · 역할</div>
-          <p class="char-desc">여기에 캐릭터 상세 설명 문구를 채워 넣을 수 있습니다.</p>
-        </div>
-      </div>
-
-    </div>
+    <div class="char-carousel" id="charCarousel"></div>
 
     <button class="carousel-arrow right" onclick="scrollCarousel(1)" aria-label="다음">
       <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
@@ -996,7 +935,7 @@
 
     <div class="quiz-result" id="quizResult">
       <img src="" id="resultImg" class="quiz-result-img" alt="결과 이미지" 
-        onerror="this.style.background='var(--bg-accent)'; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><text y=\'50%\' x=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%238c7a60\' font-size=\'11\'>No Image</text></svg>'">
+        onerror="this.style.background='var(--bg-accent)'; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><text y=\'50%\' x=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%238c7a60\' font-size=\'11\'>No Image</text></svg>.'">
       <div class="quiz-result-name" id="resultName"></div>
       <div class="quiz-result-type" id="resultType"></div>
       <p class="quiz-result-desc" id="resultDesc"></p>
@@ -1052,179 +991,19 @@
 function showSection(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-tabs a').forEach(a => a.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  
+  const targetSection = document.getElementById(id);
+  if (targetSection) targetSection.classList.add('active');
+  
   const links = document.querySelectorAll('.nav-tabs a');
-  const map = {home:0,characters:1,worldview:2,quiz:3,goods:4};
-  links[map[id]].classList.add('active');
+  const map = {home:0, characters:1, worldview:2, quiz:3, goods:4};
+  if (links[map[id]]) links[map[id]].classList.add('active');
+  
   window.scrollTo(0,0);
   return false;
 }
 
-/* ─── CAROUSEL ─── */
-const carousel = document.getElementById('charCarousel');
-const cards = carousel ? carousel.querySelectorAll('.char-card') : [];
-const dotsWrap = document.getElementById('carouselDots');
-
-function buildDots() {
-  if (!dotsWrap) return;
-  dotsWrap.innerHTML = '';
-  cards.forEach((_, i) => {
-    const d = document.createElement('button');
-    d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-    d.onclick = () => {
-      cards[i].scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
-    };
-    dotsWrap.appendChild(d);
-  });
-}
-
-function updateDots() {
-  if (!carousel || !dotsWrap) return;
-  const scrollLeft = carousel.scrollLeft;
-  const cardW = cards[0] ? cards[0].offsetWidth : carousel.offsetWidth;
-  const idx = Math.round(scrollLeft / cardW);
-  dotsWrap.querySelectorAll('.carousel-dot').forEach((d,i) => {
-    d.classList.toggle('active', i === idx);
-  });
-}
-
-function scrollCarousel(dir) {
-  if (!carousel) return;
-  const cardW = cards[0] ? cards[0].offsetWidth : carousel.offsetWidth;
-  carousel.scrollBy({left: dir * cardW, behavior: 'smooth'});
-}
-
-if (carousel) {
-  buildDots();
-  carousel.addEventListener('scroll', updateDots);
-
-  // drag to scroll
-  let isDown = false, startX, scrollLeft;
-  carousel.addEventListener('mousedown', e => {
-    isDown = true; carousel.classList.add('active');
-    startX = e.pageX - carousel.offsetLeft;
-    scrollLeft = carousel.scrollLeft;
-  });
-  carousel.addEventListener('mouseleave', () => { isDown = false; });
-  carousel.addEventListener('mouseup', () => { isDown = false; });
-  carousel.addEventListener('mousemove', e => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - carousel.offsetLeft;
-    carousel.scrollLeft = scrollLeft - (x - startX) * 1.2;
-  });
-}
-
-/* ─── GOODS DATA (수정: 인형 세트 개별 분리 및 이미지 파일명 지정) ─── */
-const goodsData = [
-  { id: 1, name: '대하 인형', price: 15000, img: 'images/goods_doll_geoha.png' },
-  { id: 6, name: '설 인형', price: 15000, img: 'images/goods_doll_seol.png' },
-  { id: 2, name: '목정훈 키링', price: 9800, img: 'images/goods_keyring_mokjeonghun.png' },
-  { id: 3, name: '구미희 키링', price: 9800, img: 'images/goods_keyring_gumihee.png' },
-  { id: 4, name: '매령 키링', price: 9800, img: 'images/goods_keyring_maeryeong.png' },
-  { id: 5, name: '김현야호 키링', price: 9800, img: 'images/goods_keyring_kimhyeonyaho.png' },
-];
-
-function renderGoods() {
-  const grid = document.getElementById('goodsGrid');
-  grid.innerHTML = goodsData.map(g => `
-    <div class="goods-card">
-      <img src="${g.img}" alt="${g.name}" class="goods-img"
-        onerror="this.outerHTML='<div class=\'goods-img-placeholder\'><span>${g.img.split('/').pop()}</span></div>'">
-      <div class="goods-info">
-        <div class="goods-name">${g.name}</div>
-        <div class="goods-price">₩${g.price.toLocaleString()}</div>
-      </div>
-      <button class="goods-add-btn" onclick="addToCart(${g.id})">장바구니에 담기</button>
-    </div>
-  `).join('');
-}
-renderGoods();
-
-/* ─── CART ─── */
-let cart = {};
-
-function addToCart(id) {
-  const item = goodsData.find(g => g.id === id);
-  if (!item) return;
-  cart[id] = cart[id] || { ...item, qty: 0 };
-  cart[id].qty++;
-  renderCart();
-  showToast(`${item.name} 담겼어요`);
-}
-
-function changeQty(id, delta) {
-  if (!cart[id]) return;
-  cart[id].qty += delta;
-  if (cart[id].qty <= 0) delete cart[id];
-  renderCart();
-}
-
-function removeItem(id) {
-  delete cart[id];
-  renderCart();
-}
-
-function renderCart() {
-  const items = Object.values(cart);
-  const badge = document.getElementById('cartBadge');
-  const total = items.reduce((s, i) => s + i.price * i.qty, 0);
-  const count = items.reduce((s, i) => s + i.qty, 0);
-
-  badge.style.display = count > 0 ? 'flex' : 'none';
-  badge.textContent = count;
-
-  document.getElementById('cartTotal').textContent = '₩' + total.toLocaleString();
-
-  const body = document.getElementById('cartBody');
-  const empty = document.getElementById('cartEmpty');
-
-  if (items.length === 0) {
-    body.innerHTML = '';
-    body.appendChild(empty);
-    empty.style.display = 'block';
-    return;
-  }
-
-  body.innerHTML = items.map(i => `
-    <div class="cart-item">
-      <img src="${i.img}" class="cart-item-img" alt="${i.name}"
-        onerror="this.style.background='var(--bg-accent)'">
-      <div style="flex:1;min-width:0">
-        <div class="cart-item-name">${i.name}</div>
-        <div class="cart-item-price">₩${i.price.toLocaleString()}</div>
-        <div class="cart-item-qty">
-          <button class="qty-btn" onclick="changeQty(${i.id},-1)">−</button>
-          <span class="qty-num">${i.qty}</span>
-          <button class="qty-btn" onclick="changeQty(${i.id},1)">+</button>
-        </div>
-      </div>
-      <button class="cart-item-del" onclick="removeItem(${i.id})">✕</button>
-    </div>
-  `).join('');
-}
-
-function toggleCart() {
-  const drawer = document.getElementById('cartDrawer');
-  const overlay = document.getElementById('cartOverlay');
-  drawer.classList.toggle('open');
-  overlay.classList.toggle('open');
-}
-
-/* ─── TOAST ─── */
-let toastTimer;
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
-}
-
-/* ─── QUIZ DATA & LOGIC ─── */
-// ==========================================
-// 1. 완전히 무작위로 섞인 질문 및 점수 데이터
-// ==========================================
+/* ─── QUIZ DATA ─── */
 const quizData = [
   {
     q: '새벽 2시, 갑자기 배가 고프다. 나는?',
@@ -1278,34 +1057,30 @@ const quizData = [
   }
 ];
 
-// ==========================================
-// 2. 확장된 6명 캐릭터 결과 데이터
-// ==========================================
+/* ─── CHARACTER RESULTS DATA (이미지 유지) ─── */
 const results = [
   { name: '김현야호', type: '야호요괴 · 유령형', img: 'images/result_kimhyeonyaho.png', desc: '존재감이 가끔 흐려지지만 조용히 할 일을 하는 타입' },
   { name: '매령', type: '수목요괴 · 은자형', img: 'images/result_maeryeong.png', desc: '조용히 창가를 지키는 나무처럼 차분하고 성숙한 타입' },
-  { name: '설', type: '설인요괴 · 순수형', img: 'images/result_seol.png', desc: '새하얗고 순수한 눈처럼 맑고 통통 튀는 활발한 타입' },
+  { name: '설이', type: '설인요괴 · 순수형', img: 'images/result_seol.png', desc: '새하얗고 순수한 눈처럼 맑고 통통 튀는 활발한 타입' },
   { name: '구미희', type: '여우요괴 · 변신의 달인', img: 'images/result_gumihee.png', desc: '눈부신 매력으로 언제 어디서나 분위기를 주도하는 타입' },
   { name: '목정훈', type: '목정요괴 · 모범생형', img: 'images/result_mokjeonghun.png', desc: '성실하고 다정하며 주변 사람들을 상냥하게 챙기는 타입' },
-  { name: '대하', type: '대하요괴 · 카리스마형', img: 'images/result_geoha.png', desc: '대하우스의 실질적 리더! 듬직하고 거침없는 매력의 소유자' }
+  { name: '거하', type: '대하요괴 · 카리스마형', img: 'images/result_geoha.png', desc: '대하우스의 실질적 리더! 듬직하고 거침없는 매력의 소유자' }
 ];
 
 let quizStep = 0;
 let quizScoreSum = 0;
 
-// ==========================================
-// 3. 선지를 화면에 오류 없이 그려주는 함수
-// ==========================================
 function renderQuiz() {
   const currentQuestion = quizData[quizStep];
-  document.getElementById('quizQuestion').innerText = currentQuestion.q;
+  document.getElementById('quizProgress').innerText = `Q ${quizStep + 1} / ${quizData.length}`;
+  document.getElementById('quizQ').innerText = currentQuestion.q;
   
-  const optionsContainer = document.getElementById('quizOptions');
+  const optionsContainer = document.getElementById('quizOpts');
   optionsContainer.innerHTML = '';
   
   currentQuestion.opts.forEach((optText, index) => {
     const btn = document.createElement('button');
-    btn.className = 'quiz-option-btn';
+    btn.className = 'quiz-opt';
     btn.innerText = optText;
     
     btn.onclick = function() {
@@ -1323,9 +1098,6 @@ function renderQuiz() {
   });
 }
 
-// ==========================================
-// 4. 6인용 점수 계산 및 이미지 출력 함수
-// ==========================================
 function showResult() {
   document.getElementById('quizCard').style.display = 'none';
   document.getElementById('quizResult').style.display = 'block';
@@ -1333,12 +1105,13 @@ function showResult() {
   const avgScore = quizScoreSum / quizData.length;
   let resultIdx = 0;
   
-  if (avgScore <= 1.5) resultIdx = 0;      // 김현야호
-  else if (avgScore <= 2.5) resultIdx = 1; // 매령
-  else if (avgScore <= 3.5) resultIdx = 2; // 설
-  else if (avgScore <= 4.5) resultIdx = 3; // 구미희
-  else if (avgScore <= 5.5) resultIdx = 4; // 목정훈
-  else resultIdx = 5;                      // 대하
+  if (avgScore <= 1.5) resultIdx = 0;      
+  else if (avgScore <= 2.5) resultIdx = 1; 
+  else if (avgScore <= 3.5) resultIdx = 2; 
+  else if (avgScore <= 4.5) resultIdx = 3; 
+  else if (avgScore <= 5.5) resultIdx = 4; 
+  else resultIdx = 5;                      
+
   const userCharacter = results[resultIdx];
 
   document.getElementById('resultName').innerText = userCharacter.name;
@@ -1349,12 +1122,14 @@ function showResult() {
   if (resultImgElement) {
     resultImgElement.src = userCharacter.img;
     resultImgElement.alt = userCharacter.name;
+    resultImgElement.style.display = 'block';
   }
 }
 
 function restartQuiz() {
-  quizStep = 0; quizScoreSum = 0;
-  document.getElementById('quizCard').style.style.display = 'block';
+  quizStep = 0; 
+  quizScoreSum = 0;
+  document.getElementById('quizCard').style.display = 'block';
   document.getElementById('quizResult').style.display = 'none';
   renderQuiz();
 }
@@ -1363,27 +1138,215 @@ function shareResult() {
   showToast('🔗 결과 링크가 클립보드에 복사되었습니다!');
 }
 
-// 퀴즈 초기 실행
+// 퀴즈 최초 로드
 renderQuiz();
 
-// ==========================================
-// 5. 새로고침 시 기존 탭 유지 기능
-// ==========================================
-document.querySelectorAll('.nav-link, .menu-btn, nav a').forEach(btn => {
+/* ─── CHARACTERS TAB DYNAMIC RENDER ─── */
+function renderCharacters() {
+  const carouselContainer = document.getElementById('charCarousel');
+  if (!carouselContainer) return;
+  
+  carouselContainer.innerHTML = results.map((char, index) => `
+    <div class="char-card">
+      <img src="${char.img}" alt="${char.name}" class="char-card-img"
+        onerror="this.outerHTML='<div class=\'char-card-img-placeholder\'><span>${char.img.split('/').pop()} (4:3)</span></div>'">
+      <div class="char-card-body">
+        <div class="char-name">${char.name}</div>
+        <div class="char-type">${char.type}</div>
+        <p class="char-desc">${char.desc}</p>
+      </div>
+    </div>
+  `).join('');
+  
+  // 캐러셀 카드 배열 재정의 및 도트 빌드
+  window.cards = carouselContainer.querySelectorAll('.char-card');
+  buildDots();
+}
+
+/* ─── CAROUSEL SYSTEM ─── */
+const carousel = document.getElementById('charCarousel');
+const dotsWrap = document.getElementById('carouselDots');
+
+function buildDots() {
+  if (!dotsWrap || !window.cards) return;
+  dotsWrap.innerHTML = '';
+  window.cards.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => {
+      window.cards[i].scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+    };
+    dotsWrap.appendChild(d);
+  });
+}
+
+function updateDots() {
+  if (!carousel || !dotsWrap || !window.cards || window.cards.length === 0) return;
+  const scrollLeft = carousel.scrollLeft;
+  const cardW = window.cards[0] ? window.cards[0].offsetWidth : carousel.offsetWidth;
+  const idx = Math.round(scrollLeft / cardW);
+  dotsWrap.querySelectorAll('.carousel-dot').forEach((d,i) => {
+    d.classList.toggle('active', i === idx);
+  });
+}
+
+function scrollCarousel(dir) {
+  if (!carousel || !window.cards || window.cards.length === 0) return;
+  const cardW = window.cards[0] ? window.cards[0].offsetWidth : carousel.offsetWidth;
+  carousel.scrollBy({left: dir * cardW, behavior: 'smooth'});
+}
+
+if (carousel) {
+  carousel.addEventListener('scroll', updateDots);
+  let isDown = false, startX, scrollLeft;
+  carousel.addEventListener('mousedown', e => {
+    isDown = true; carousel.classList.add('active');
+    startX = e.pageX - carousel.offsetLeft;
+    scrollLeft = carousel.scrollLeft;
+  });
+  carousel.addEventListener('mouseleave', () => { isDown = false; });
+  carousel.addEventListener('mouseup', () => { isDown = false; });
+  carousel.addEventListener('mousemove', e => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - carousel.offsetLeft;
+    carousel.scrollLeft = scrollLeft - (x - startX) * 1.2;
+  });
+}
+
+// 캐릭터 화면 최초 생성
+renderCharacters();
+
+/* ─── GOODS DATA ─── */
+const goodsData = [
+  { id: 1, name: '대하 인형', price: 15000, img: 'images/goods_doll_geoha.png' },
+  { id: 6, name: '설 인형', price: 15000, img: 'images/goods_doll_seol.png' },
+  { id: 2, name: '목정훈 키링', price: 9800, img: 'images/goods_keyring_mokjeonghun.png' },
+  { id: 3, name: '구미희 키링', price: 9800, img: 'images/goods_keyring_gumihee.png' },
+  { id: 4, name: '매령 키링', price: 9800, img: 'images/goods_keyring_maeryeong.png' },
+  { id: 5, name: '김현야호 키링', price: 9800, img: 'images/goods_keyring_kimhyeonyaho.png' },
+];
+
+function renderGoods() {
+  const grid = document.getElementById('goodsGrid');
+  if (!grid) return;
+  grid.innerHTML = goodsData.map(g => `
+    <div class="goods-card">
+      <img src="${g.img}" alt="${g.name}" class="goods-img"
+        onerror="this.outerHTML='<div class=\'goods-img-placeholder\'><span>${g.img.split('/').pop()}</span></div>'">
+      <div class="goods-info">
+        <div class="goods-name">${g.name}</div>
+        <div class="goods-price">₩${g.price.toLocaleString()}</div>
+      </div>
+      <button class="goods-add-btn" onclick="addToCart(${g.id})">장바구니에 담기</button>
+    </div>
+  `).join('');
+}
+renderGoods();
+
+/* ─── CART ─── */
+let cart = {};
+
+function addToCart(id) {
+  const item = goodsData.find(g => g.id === id);
+  if (!item) return;
+  cart[id] = cart[id] || { ...item, qty: 0 };
+  cart[id].qty++;
+  renderCart();
+  showToast(`${item.name} 담겼어요`);
+}
+
+function changeQty(id, delta) {
+  if (!cart[id]) return;
+  cart[id].qty += delta;
+  if (cart[id].qty <= 0) delete cart[id];
+  renderCart();
+}
+
+function removeItem(id) {
+  delete cart[id];
+  renderCart();
+}
+
+function renderCart() {
+  const items = Object.values(cart);
+  const badge = document.getElementById('cartBadge');
+  const total = items.reduce((s, i) => s + i.price * i.qty, 0);
+  const count = items.reduce((s, i) => s + i.qty, 0);
+
+  if (badge) {
+    badge.style.display = count > 0 ? 'flex' : 'none';
+    badge.textContent = count;
+  }
+
+  const totalEl = document.getElementById('cartTotal');
+  if (totalEl) totalEl.textContent = '₩' + total.toLocaleString();
+
+  const body = document.getElementById('cartBody');
+  const empty = document.getElementById('cartEmpty');
+
+  if (items.length === 0) {
+    if (body) body.innerHTML = '';
+    if (body && empty) body.appendChild(empty);
+    if (empty) empty.style.display = 'block';
+    return;
+  }
+
+  if (body) {
+    body.innerHTML = items.map(i => `
+      <div class="cart-item">
+        <img src="${i.img}" class="cart-item-img" alt="${i.name}"
+          onerror="this.style.background='var(--bg-accent)'">
+        <div style="flex:1;min-width:0">
+          <div class="cart-item-name">${i.name}</div>
+          <div class="cart-item-price">₩${i.price.toLocaleString()}</div>
+          <div class="cart-item-qty">
+            <button class="qty-btn" onclick="changeQty(${i.id},-1)">−</button>
+            <span class="qty-num">${i.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${i.id},1)">+</button>
+          </div>
+        </div>
+        <button class="cart-item-del" onclick="removeItem(${i.id})">✕</button>
+      </div>
+    `).join('');
+  }
+}
+
+function toggleCart() {
+  const drawer = document.getElementById('cartDrawer');
+  const overlay = document.getElementById('cartOverlay');
+  if (drawer) drawer.classList.toggle('open');
+  if (overlay) overlay.classList.toggle('open');
+}
+
+/* ─── TOAST ─── */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+/* ─── REFRESH TAP KEEP SYSTEM ─── */
+document.querySelectorAll('.nav-link, .nav-tabs a, .nav-logo').forEach(btn => {
   btn.addEventListener('click', function() {
-    const targetId = this.getAttribute('onclick')?.match(/'([^']+)'/)?.[1] || this.dataset.tab;
-    if (targetId) localStorage.setItem('currentTab', targetId);
+    const onclickAttr = this.getAttribute('onclick');
+    if (onclickAttr) {
+      const match = onclickAttr.match(/'([^']+)'/);
+      if (match && match[1]) {
+        localStorage.setItem('currentTab', match[1]);
+      }
+    }
   });
 });
 
 window.addEventListener('DOMContentLoaded', () => {
   const savedTab = localStorage.getItem('currentTab');
   if (savedTab) {
-    const activeBtn = document.querySelector(`[onclick*="${savedTab}"], [data-tab="${savedTab}"]`);
-    if (activeBtn) activeBtn.click();
+    showSection(savedTab);
   }
 });
-
 </script>
 </body>
 </html>
